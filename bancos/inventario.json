@@ -1,0 +1,75 @@
+{
+  "exportado_em": "2026-11-12",
+  "servidor": "8.0.46",
+  "bancos": [
+    {
+      "nome": "garagem",
+      "tabelas": [
+        {
+          "tabela": "acessa",
+          "linhas": 0
+        },
+        {
+          "tabela": "avaliacao",
+          "linhas": 0
+        },
+        {
+          "tabela": "dono_oficina",
+          "linhas": 0
+        },
+        {
+          "tabela": "entusiasta",
+          "linhas": 0
+        },
+        {
+          "tabela": "etapas",
+          "linhas": 0
+        },
+        {
+          "tabela": "fonte",
+          "linhas": 0
+        },
+        {
+          "tabela": "fotos",
+          "linhas": 0
+        },
+        {
+          "tabela": "guia",
+          "linhas": 0
+        },
+        {
+          "tabela": "legalizacao",
+          "linhas": 0
+        },
+        {
+          "tabela": "oficina",
+          "linhas": 0
+        },
+        {
+          "tabela": "possui",
+          "linhas": 0
+        },
+        {
+          "tabela": "preferencias",
+          "linhas": 0
+        },
+        {
+          "tabela": "registra",
+          "linhas": 0
+        },
+        {
+          "tabela": "servicos",
+          "linhas": 0
+        },
+        {
+          "tabela": "usuario",
+          "linhas": 0
+        }
+      ]
+    },
+    {
+      "nome": "garagem2",
+      "tabelas": []
+    }
+  ]
+}

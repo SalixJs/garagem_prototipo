@@ -1,0 +1,6 @@
+# Preserve os bytes do pacote para a verificacao SHA-256 em qualquer sistema.
+* -text
+*.PNG binary
+*.png binary
+*.jpg binary
+*.jar binary

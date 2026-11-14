@@ -1,0 +1,28 @@
+GARAGEM — SITE PARA XAMPP
+
+Acesso: http://localhost/garagem/
+No painel do XAMPP, inicie o Apache. MySQL não é necessário nesta versão.
+
+Arquivos: index.html, style.css, app.js e assets/.
+Não há instalação de pacotes nem compilação.
+
+Esta entrega é o site (frontend), conforme solicitado. Inclui navegação,
+busca e filtros de guias, favoritos, checklist local e busca demonstrativa
+de oficinas. Não inclui painel administrativo, autenticação ou integração
+com o esquema MySQL do repositório.
+
+Os guias são roteiros de preparação para consulta, não pareceres técnicos
+ou jurídicos. Os perfis de oficinas são explicitamente fictícios, e ficam
+ocultos até que o visitante ative os exemplos. Não há contatos ou preços
+inventados apresentados como reais.
+
+Favoritos e checklists usam localStorage. São específicos do navegador
+e da origem (endereço) onde o site é aberto.
+
+Origem do projeto: https://github.com/SalixJs/Projeto_garagem
+Fotografia: Unsplash, https://unsplash.com/photos/1503376780353-7e6692767b70
+Arquivo obtido de images.unsplash.com/photo-1503376780353-7e6692767b70.
+Fontes: Barlow Condensed e DM Sans, Google Fonts, com fallback local.
+Ilustrações e ícones vetoriais criados para esta interface.
+
+Para editar: abra esta pasta no Visual Studio Code.
