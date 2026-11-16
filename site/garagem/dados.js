@@ -722,42 +722,447 @@ const guias = [
   }
 ];
 
+// Todos os estabelecimentos, endereços, distâncias, horários e relatos abaixo são fictícios.
+// Distâncias simuladas não usam localização e não são comparáveis entre cidades reais.
 const oficinas = [
   {
     "id": 1,
     "nomeFantasia": "Oficina Horizonte",
+    "descricao": "Projetos de suspensão e revisão do conjunto de rodas.",
+    "horarios": "Segunda a sexta, 8h às 18h; sábado, 8h às 12h; domingo fechado (exemplo)",
+    "cep": "00000-000",
+    "logradouro": "Rua Fictícia do Projeto 1",
+    "numero": "100",
+    "bairro": "Bairro de Exemplo",
     "cidade": "São Paulo",
     "uf": "SP",
+    "servicos": [
+      "Suspensão",
+      "Freios",
+      "Rodas e pneus"
+    ],
     "especialidade": "Suspensão",
-    "bairro": "Zona oeste",
-    "descricao": "Exemplo de perfil com serviços de suspensão, alinhamento e montagem de rodas."
+    "distanciaKm": 2.5,
+    "notaMedia": 4.5,
+    "totalAvaliacoes": 4,
+    "avaliacoes": [
+      {
+        "id": 1,
+        "autor": "Pessoa de exemplo 1",
+        "data": null,
+        "estrelas": 5,
+        "descricao": "Exemplo: o orçamento separava os serviços e explicava o que precisava ser confirmado.",
+        "ficticia": true
+      },
+      {
+        "id": 2,
+        "autor": "Pessoa de exemplo 2",
+        "data": null,
+        "estrelas": 4,
+        "descricao": "Exemplo: a conversa sobre compatibilidade ajudou a organizar as perguntas do projeto.",
+        "ficticia": true
+      },
+      {
+        "id": 3,
+        "autor": "Pessoa de exemplo 3",
+        "data": null,
+        "estrelas": 4,
+        "descricao": "Exemplo: gostaria de receber mais detalhes sobre os prazos e as etapas previstas.",
+        "ficticia": true
+      },
+      {
+        "id": 4,
+        "autor": "Pessoa de exemplo 4",
+        "data": null,
+        "estrelas": 5,
+        "descricao": "Exemplo: o atendimento mostrou os pontos de manutenção que deveriam ser observados.",
+        "ficticia": true
+      }
+    ],
+    "ficticia": true
   },
   {
     "id": 2,
     "nomeFantasia": "Estúdio de Cor",
-    "cidade": "São Paulo",
+    "descricao": "Preparação de superfície, acabamento e envelopamento.",
+    "horarios": "Segunda a sexta, 9h às 18h; sábado e domingo fechado (exemplo)",
+    "cep": "00000-000",
+    "logradouro": "Rua Fictícia do Projeto 2",
+    "numero": "200",
+    "bairro": "Bairro de Exemplo",
+    "cidade": "Santos",
     "uf": "SP",
-    "especialidade": "Visual",
-    "bairro": "Zona sul",
-    "descricao": "Exemplo de perfil com pintura, envelopamento e acabamento automotivo."
+    "servicos": [
+      "Estética",
+      "Pintura",
+      "Envelopamento"
+    ],
+    "especialidade": "Estética",
+    "distanciaKm": 7,
+    "notaMedia": 3.7,
+    "totalAvaliacoes": 3,
+    "avaliacoes": [
+      {
+        "id": 11,
+        "autor": "Pessoa de exemplo 1",
+        "data": null,
+        "estrelas": 4,
+        "descricao": "Exemplo: o orçamento separava os serviços e explicava o que precisava ser confirmado.",
+        "ficticia": true
+      },
+      {
+        "id": 12,
+        "autor": "Pessoa de exemplo 2",
+        "data": null,
+        "estrelas": 4,
+        "descricao": "Exemplo: a conversa sobre compatibilidade ajudou a organizar as perguntas do projeto.",
+        "ficticia": true
+      },
+      {
+        "id": 13,
+        "autor": "Pessoa de exemplo 3",
+        "data": null,
+        "estrelas": 3,
+        "descricao": "Exemplo: gostaria de receber mais detalhes sobre os prazos e as etapas previstas.",
+        "ficticia": true
+      }
+    ],
+    "ficticia": true
   },
   {
     "id": 3,
     "nomeFantasia": "Box Performance",
+    "descricao": "Diagnóstico e planejamento de alterações de motor.",
+    "horarios": "Segunda a sexta, 8h às 18h; sábado, 8h às 12h; domingo fechado (exemplo)",
+    "cep": "00000-000",
+    "logradouro": "Rua Fictícia do Projeto 3",
+    "numero": "300",
+    "bairro": "Bairro de Exemplo",
     "cidade": "Campinas",
     "uf": "SP",
-    "especialidade": "Performance",
-    "bairro": "Região central",
-    "descricao": "Exemplo de perfil com diagnóstico e preparação de projetos de motor."
+    "servicos": [
+      "Motor",
+      "Performance",
+      "Remap"
+    ],
+    "especialidade": "Motor",
+    "distanciaKm": 12,
+    "notaMedia": 5,
+    "totalAvaliacoes": 5,
+    "avaliacoes": [
+      {
+        "id": 21,
+        "autor": "Pessoa de exemplo 1",
+        "data": null,
+        "estrelas": 5,
+        "descricao": "Exemplo: o orçamento separava os serviços e explicava o que precisava ser confirmado.",
+        "ficticia": true
+      },
+      {
+        "id": 22,
+        "autor": "Pessoa de exemplo 2",
+        "data": null,
+        "estrelas": 5,
+        "descricao": "Exemplo: a conversa sobre compatibilidade ajudou a organizar as perguntas do projeto.",
+        "ficticia": true
+      },
+      {
+        "id": 23,
+        "autor": "Pessoa de exemplo 3",
+        "data": null,
+        "estrelas": 5,
+        "descricao": "Exemplo: gostaria de receber mais detalhes sobre os prazos e as etapas previstas.",
+        "ficticia": true
+      },
+      {
+        "id": 24,
+        "autor": "Pessoa de exemplo 4",
+        "data": null,
+        "estrelas": 5,
+        "descricao": "Exemplo: o atendimento mostrou os pontos de manutenção que deveriam ser observados.",
+        "ficticia": true
+      },
+      {
+        "id": 25,
+        "autor": "Pessoa de exemplo 5",
+        "data": null,
+        "estrelas": 5,
+        "descricao": "Exemplo: o escopo foi explicado antes de qualquer decisão sobre peças.",
+        "ficticia": true
+      }
+    ],
+    "ficticia": true
   },
   {
     "id": 4,
     "nomeFantasia": "Roda Livre",
+    "descricao": "Análise de freios e compatibilidade de rodas e pneus.",
+    "horarios": "Segunda a sexta, 9h às 18h; sábado e domingo fechado (exemplo)",
+    "cep": "00000-000",
+    "logradouro": "Rua Fictícia do Projeto 4",
+    "numero": "400",
+    "bairro": "Bairro de Exemplo",
     "cidade": "Curitiba",
     "uf": "PR",
-    "especialidade": "Rodas e pneus",
-    "bairro": "Região central",
-    "descricao": "Exemplo de perfil com montagem, balanceamento e serviços de rodas e pneus."
+    "servicos": [
+      "Freios",
+      "Rodas e pneus",
+      "Suspensão"
+    ],
+    "especialidade": "Freios",
+    "distanciaKm": 1,
+    "notaMedia": 4.3,
+    "totalAvaliacoes": 4,
+    "avaliacoes": [
+      {
+        "id": 31,
+        "autor": "Pessoa de exemplo 1",
+        "data": null,
+        "estrelas": 4,
+        "descricao": "Exemplo: o orçamento separava os serviços e explicava o que precisava ser confirmado.",
+        "ficticia": true
+      },
+      {
+        "id": 32,
+        "autor": "Pessoa de exemplo 2",
+        "data": null,
+        "estrelas": 5,
+        "descricao": "Exemplo: a conversa sobre compatibilidade ajudou a organizar as perguntas do projeto.",
+        "ficticia": true
+      },
+      {
+        "id": 33,
+        "autor": "Pessoa de exemplo 3",
+        "data": null,
+        "estrelas": 4,
+        "descricao": "Exemplo: gostaria de receber mais detalhes sobre os prazos e as etapas previstas.",
+        "ficticia": true
+      },
+      {
+        "id": 34,
+        "autor": "Pessoa de exemplo 4",
+        "data": null,
+        "estrelas": 4,
+        "descricao": "Exemplo: o atendimento mostrou os pontos de manutenção que deveriam ser observados.",
+        "ficticia": true
+      }
+    ],
+    "ficticia": true
+  },
+  {
+    "id": 5,
+    "nomeFantasia": "Garagem dos Campos",
+    "descricao": "Estudo de projetos turbo e preparação de documentação para consulta.",
+    "horarios": "Segunda a sexta, 8h às 18h; sábado, 8h às 12h; domingo fechado (exemplo)",
+    "cep": "00000-000",
+    "logradouro": "Rua Fictícia do Projeto 5",
+    "numero": "500",
+    "bairro": "Bairro de Exemplo",
+    "cidade": "Ponta Grossa",
+    "uf": "PR",
+    "servicos": [
+      "Turbo",
+      "Performance",
+      "Legalização"
+    ],
+    "especialidade": "Turbo",
+    "distanciaKm": 4,
+    "notaMedia": 4.7,
+    "totalAvaliacoes": 3,
+    "avaliacoes": [
+      {
+        "id": 41,
+        "autor": "Pessoa de exemplo 1",
+        "data": null,
+        "estrelas": 5,
+        "descricao": "Exemplo: o orçamento separava os serviços e explicava o que precisava ser confirmado.",
+        "ficticia": true
+      },
+      {
+        "id": 42,
+        "autor": "Pessoa de exemplo 2",
+        "data": null,
+        "estrelas": 4,
+        "descricao": "Exemplo: a conversa sobre compatibilidade ajudou a organizar as perguntas do projeto.",
+        "ficticia": true
+      },
+      {
+        "id": 43,
+        "autor": "Pessoa de exemplo 3",
+        "data": null,
+        "estrelas": 5,
+        "descricao": "Exemplo: gostaria de receber mais detalhes sobre os prazos e as etapas previstas.",
+        "ficticia": true
+      }
+    ],
+    "ficticia": true
+  },
+  {
+    "id": 6,
+    "nomeFantasia": "Oficina Vale Azul",
+    "descricao": "Planejamento de áudio e acabamento interno.",
+    "horarios": "Segunda a sexta, 9h às 18h; sábado e domingo fechado (exemplo)",
+    "cep": "00000-000",
+    "logradouro": "Rua Fictícia do Projeto 6",
+    "numero": "600",
+    "bairro": "Bairro de Exemplo",
+    "cidade": "Londrina",
+    "uf": "PR",
+    "servicos": [
+      "Áudio",
+      "Estética"
+    ],
+    "especialidade": "Áudio",
+    "distanciaKm": 18,
+    "notaMedia": 3.5,
+    "totalAvaliacoes": 4,
+    "avaliacoes": [
+      {
+        "id": 51,
+        "autor": "Pessoa de exemplo 1",
+        "data": null,
+        "estrelas": 3,
+        "descricao": "Exemplo: o orçamento separava os serviços e explicava o que precisava ser confirmado.",
+        "ficticia": true
+      },
+      {
+        "id": 52,
+        "autor": "Pessoa de exemplo 2",
+        "data": null,
+        "estrelas": 4,
+        "descricao": "Exemplo: a conversa sobre compatibilidade ajudou a organizar as perguntas do projeto.",
+        "ficticia": true
+      },
+      {
+        "id": 53,
+        "autor": "Pessoa de exemplo 3",
+        "data": null,
+        "estrelas": 4,
+        "descricao": "Exemplo: gostaria de receber mais detalhes sobre os prazos e as etapas previstas.",
+        "ficticia": true
+      },
+      {
+        "id": 54,
+        "autor": "Pessoa de exemplo 4",
+        "data": null,
+        "estrelas": 3,
+        "descricao": "Exemplo: o atendimento mostrou os pontos de manutenção que deveriam ser observados.",
+        "ficticia": true
+      }
+    ],
+    "ficticia": true
+  },
+  {
+    "id": 7,
+    "nomeFantasia": "Box Rota Sul",
+    "descricao": "Avaliação de montagem e aplicação de sistemas de escapamento.",
+    "horarios": "Segunda a sexta, 8h às 18h; sábado, 8h às 12h; domingo fechado (exemplo)",
+    "cep": "00000-000",
+    "logradouro": "Rua Fictícia do Projeto 7",
+    "numero": "700",
+    "bairro": "Bairro de Exemplo",
+    "cidade": "Joinville",
+    "uf": "SC",
+    "servicos": [
+      "Escapamento",
+      "Motor",
+      "Performance"
+    ],
+    "especialidade": "Escapamento",
+    "distanciaKm": 24,
+    "notaMedia": 4.3,
+    "totalAvaliacoes": 3,
+    "avaliacoes": [
+      {
+        "id": 61,
+        "autor": "Pessoa de exemplo 1",
+        "data": null,
+        "estrelas": 4,
+        "descricao": "Exemplo: o orçamento separava os serviços e explicava o que precisava ser confirmado.",
+        "ficticia": true
+      },
+      {
+        "id": 62,
+        "autor": "Pessoa de exemplo 2",
+        "data": null,
+        "estrelas": 4,
+        "descricao": "Exemplo: a conversa sobre compatibilidade ajudou a organizar as perguntas do projeto.",
+        "ficticia": true
+      },
+      {
+        "id": 63,
+        "autor": "Pessoa de exemplo 3",
+        "data": null,
+        "estrelas": 5,
+        "descricao": "Exemplo: gostaria de receber mais detalhes sobre os prazos e as etapas previstas.",
+        "ficticia": true
+      }
+    ],
+    "ficticia": true
+  },
+  {
+    "id": 8,
+    "nomeFantasia": "Ateliê do Motor",
+    "descricao": "Exemplo de diagnóstico eletrônico e análise de calibração.",
+    "horarios": "Segunda a sexta, 9h às 18h; sábado e domingo fechado (exemplo)",
+    "cep": "00000-000",
+    "logradouro": "Rua Fictícia do Projeto 8",
+    "numero": "800",
+    "bairro": "Bairro de Exemplo",
+    "cidade": "Belo Horizonte",
+    "uf": "MG",
+    "servicos": [
+      "Remap",
+      "Motor",
+      "Legalização"
+    ],
+    "especialidade": "Remap",
+    "distanciaKm": 3,
+    "notaMedia": 3,
+    "totalAvaliacoes": 5,
+    "avaliacoes": [
+      {
+        "id": 71,
+        "autor": "Pessoa de exemplo 1",
+        "data": null,
+        "estrelas": 2,
+        "descricao": "Exemplo: o orçamento separava os serviços e explicava o que precisava ser confirmado.",
+        "ficticia": true
+      },
+      {
+        "id": 72,
+        "autor": "Pessoa de exemplo 2",
+        "data": null,
+        "estrelas": 3,
+        "descricao": "Exemplo: a conversa sobre compatibilidade ajudou a organizar as perguntas do projeto.",
+        "ficticia": true
+      },
+      {
+        "id": 73,
+        "autor": "Pessoa de exemplo 3",
+        "data": null,
+        "estrelas": 3,
+        "descricao": "Exemplo: gostaria de receber mais detalhes sobre os prazos e as etapas previstas.",
+        "ficticia": true
+      },
+      {
+        "id": 74,
+        "autor": "Pessoa de exemplo 4",
+        "data": null,
+        "estrelas": 4,
+        "descricao": "Exemplo: o atendimento mostrou os pontos de manutenção que deveriam ser observados.",
+        "ficticia": true
+      },
+      {
+        "id": 75,
+        "autor": "Pessoa de exemplo 5",
+        "data": null,
+        "estrelas": 3,
+        "descricao": "Exemplo: o escopo foi explicado antes de qualquer decisão sobre peças.",
+        "ficticia": true
+      }
+    ],
+    "ficticia": true
   }
 ];
 

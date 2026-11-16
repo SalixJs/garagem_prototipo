@@ -154,15 +154,113 @@ const mapArt=`<div class="map-art" aria-label="Ilustração de mapa"><svg viewBo
 function renderHome(){main.innerHTML=`<section class="hero"><img class="hero-image" src="assets/porsche.jpg" alt="Porsche escuro em uma estrada" fetchpriority="high"><div class="container"><div class="hero-copy"><div class="hero-label">Seu ponto de partida para modificar</div><h1>Seu carro.<br>Seu projeto.<br>O caminho começa aqui.</h1><p>Da primeira ideia à próxima modificação. Explore guias e encontre o caminho para tirar seu projeto do papel.</p><div class="actions"><a class="button" href="#guias">Explorar guias ${icon('arrow')}</a><a class="button secondary" href="#oficinas">Encontrar oficinas</a></div></div><div class="hero-caption">Paixão por carros. Informação para começar.</div></div></section><section class="benefits" aria-label="Sobre o Garagem"><div class="container"><div class="benefit">${icon('book')}<div><strong>Comece com informação</strong><small>Roteiros para planejar sua modificação</small></div></div><div class="benefit">${icon('pin')}<div><strong>Encontre sua especialidade</strong><small>Busca por região e tipo de serviço</small></div></div><div class="benefit">${icon('shield')}<div><strong>Consulte a fonte</strong><small>Referências oficiais para ir além</small></div></div></div></section><section class="container section"><div class="section-heading"><div><h2>Qual é o seu próximo projeto?</h2><p>Escolha uma modificação e descubra por onde começar.</p></div><a class="text-link" href="#guias">Ver todos os guias ${icon('arrow')}</a></div><div class="guide-grid">${guides.slice(0,3).map(guideCard).join('')}</div></section><section class="container section" style="padding-top:0"><div class="workshop-banner"><div class="banner-copy"><h2>Um bom projeto precisa da oficina certa.</h2><p>Encontre especialidades e compare serviços. O diretório está em formação; conheça a experiência com perfis de exemplo.</p><a href="#oficinas" class="button">Explorar oficinas ${icon('arrow')}</a></div>${mapArt}</div><div class="how"><h2>Da ideia ao próximo passo.</h2><div class="how-grid"><div class="step"><span class="step-number">01</span><div><h3>Escolha a modificação</h3><p>Encontre o tema do seu projeto e organize suas dúvidas.</p></div></div><div class="step"><span class="step-number">02</span><div><h3>Confira as exigências</h3><p>Use as fontes oficiais e confirme o procedimento no seu estado.</p></div></div><div class="step"><span class="step-number">03</span><div><h3>Converse com uma oficina</h3><p>Procure a especialidade certa antes de decidir o próximo passo.</p></div></div></div></div></section>`;}
 function pageHeader(title,desc){return `<div class="page-heading"><a class="breadcrumb" href="#inicio">Início <span aria-hidden="true">/</span></a><h1>${title}</h1><p>${desc}</p></div>`;}
 
-function renderWorkshops(){city='';service='';query='';main.innerHTML=`<div class="container">${pageHeader('Encontre quem entende do seu projeto.','Busque por cidade e especialidade para conhecer a experiência do diretório.')}<div class="page-content"><div class="notice"><strong>Nosso diretório está em formação.</strong><p>Ainda não há oficinas verificadas publicadas. Os exemplos abaixo são fictícios e não oferecem contratação ou contato.</p></div><label class="demo-switch"><input type="checkbox" id="demo" ${demo?'checked':''}> Mostrar oficinas de exemplo</label><div class="toolbar"><label class="search">${icon('search')}<input id="workshop-search" type="search" placeholder="Nome, cidade ou serviço" aria-label="Buscar oficinas"></label><select id="city" aria-label="Filtrar por cidade"><option value="">Todas as cidades</option>${[...new Set(workshops.map(w=>w.cidade))].sort().map(c=>`<option>${c}</option>`).join('')}</select><select id="service" aria-label="Filtrar por serviço"><option value="">Todos os serviços</option>${[...new Set(workshops.map(w=>w.especialidade))].sort().map(s=>`<option>${s}</option>`).join('')}</select></div><div class="result-count" id="workshop-count" aria-live="polite"></div><div id="workshop-results"></div></div></div>`;filterWorkshops();}
-function filterWorkshops(){const list=demo?workshops.filter(w=>(!city||w.cidade===city)&&(!service||w.especialidade===service)&&normalize(`${w.nomeFantasia} ${w.cidade} ${w.especialidade}`).includes(normalize(query))):[];document.querySelector('#workshop-count').textContent=demo?`${list.length} ${list.length===1?'perfil de exemplo':'perfis de exemplo'}`:'Nenhuma oficina publicada';document.querySelector('#workshop-results').innerHTML=list.length?`<div class="workshop-grid">${list.map(w=>`<article class="workshop-card"><div class="workshop-top"><div class="workshop-avatar">${icon('wrench')}</div><div><h3>${w.nomeFantasia}</h3><small>${w.cidade}, ${w.uf} · ${w.bairro}</small></div></div><span class="tag">${w.especialidade}</span><span class="tag">Perfil fictício</span><p>${w.descricao}</p><button class="plain-button" data-workshop="${w.id}">Ver perfil ${icon('arrow')}</button></article>`).join('')}</div>`:`<div class="empty">${icon('pin')}<h3>${demo?'Nenhum resultado para esses filtros':'Estamos preparando os primeiros encontros.'}</h3><p>${demo?'Escolha outra cidade ou especialidade para explorar os exemplos.':'Enquanto o diretório ganha forma, explore os guias ou veja como será um perfil de oficina.'}</p><button class="button light" ${demo?'data-reset-workshops':'data-show-demo'}>${demo?'Limpar filtros':'Conhecer os perfis de exemplo'}</button></div>`;}
+const specialties = ['Turbo','Motor','Suspensão','Freios','Áudio','Estética','Escapamento','Performance','Remap','Legalização'];
+let workshopQuery = '';
+const defaultFilters = () => ({order:'distance', specialties:[], rating:0, distance:''});
+let workshopFilters = defaultFilters();
+function renderWorkshops() {
+  main.innerHTML = `<div class="container">${pageHeader('Encontre quem entende do seu projeto.','Compare especialidades e conheça a experiência do diretório em formação.')}
+    <div class="page-content"><div class="notice"><strong>Nosso diretório está em formação.</strong><p>Não há oficinas verificadas publicadas. Nomes, endereços, horários, notas, avaliações e distâncias são exemplos fictícios. As cidades são referências de navegação; não representam estabelecimentos reais.</p></div>
+    <label class="demo-switch"><input type="checkbox" id="demo" ${demo?'checked':''}> Mostrar oficinas de exemplo</label>
+    <div class="toolbar"><label class="search">${icon('search')}<input id="workshop-search" type="search" aria-label="Buscar oficinas" placeholder="Nome, cidade ou serviço" value="${escapeHTML(workshopQuery)}"></label>
+      <select id="city" aria-label="Filtrar por cidade">${options(workshops.map(w=>w.cidade),'Todas as cidades')}</select>
+      <select id="service" aria-label="Filtrar por serviço">${options(workshops.flatMap(w=>w.servicos),'Todos os serviços')}</select>
+      <button class="button light" id="filters-toggle" aria-expanded="false" aria-controls="workshop-filters">Filtros</button>
+    </div>
+    <form id="workshop-filters" class="filters-panel" hidden>
+      <h2>Refine sua busca</h2><p>As especialidades selecionadas são alternativas entre si. Cidade, serviço, nota e distância são combinados.</p>
+      <div class="form-grid">
+        <label class="field">Ordenar por<select name="order"><option value="distance">Mais próximas</option><option value="rating">Melhor avaliadas</option><option value="reviews">Mais avaliadas</option></select></label>
+        <label class="field">Avaliação mínima<select name="rating"><option value="0">Todas</option>${[1,2,3,4,5].map(n=>`<option value="${n}">${n} ou mais</option>`).join('')}</select></label>
+        <label class="field">Distância de exemplo<select name="distance"><option value="">Todas</option>${[1,2,3,4,5,10,15].map(n=>`<option value="${n}">Até ${n} km</option>`).join('')}<option value="20+">20 km ou mais</option></select></label>
+      </div><fieldset><legend>Especialidades</legend><div class="chips">${specialties.map(value=>`<label class="choice-chip"><input type="checkbox" name="specialty" value="${escapeHTML(value)}"><span>${escapeHTML(value)}</span></label>`).join('')}</div></fieldset>
+      <p class="help">Distâncias simuladas, sem geolocalização. Use “Todas” para incluir também a faixa entre 15 e 20 km.</p>
+      <div class="actions"><button class="button" type="submit">Ver resultados</button><button class="button light" type="button" data-reset-workshops>Limpar</button></div>
+    </form>
+    <p class="result-count" id="filter-summary"></p><div class="result-count" id="workshop-count" aria-live="polite"></div><div id="workshop-results" tabindex="-1"></div>
+    </div></div>`;
+  document.querySelector('#city').value = city;
+  document.querySelector('#service').value = service;
+  syncWorkshopFilters(); filterWorkshops();
+}
+function syncWorkshopFilters() {
+  const form = document.querySelector('#workshop-filters');
+  if (!form) return;
+  form.elements.order.value = workshopFilters.order;
+  form.elements.rating.value = workshopFilters.rating;
+  form.elements.distance.value = workshopFilters.distance;
+  form.querySelectorAll('[name="specialty"]').forEach(input => { input.checked = workshopFilters.specialties.includes(input.value); });
+}
+// Função pura: a mesma combinação é aplicada a busca, cidade e filtros avançados.
+function matchingWorkshops() {
+  const filters = workshopFilters;
+  return workshops.filter(w =>
+    (!city || w.cidade === city) && (!service || w.servicos.includes(service)) &&
+    normalize(`${w.nomeFantasia} ${w.cidade} ${w.uf} ${w.especialidade} ${w.servicos.join(' ')}`).includes(normalize(workshopQuery)) &&
+    (!filters.specialties.length || filters.specialties.some(value => w.servicos.includes(value))) &&
+    w.notaMedia >= filters.rating &&
+    (!filters.distance || (filters.distance === '20+' ? w.distanciaKm >= 20 : w.distanciaKm <= Number(filters.distance)))
+  ).sort((a,b) => {
+    const difference = filters.order === 'rating' ? b.notaMedia-a.notaMedia : filters.order === 'reviews' ? b.totalAvaliacoes-a.totalAvaliacoes : a.distanciaKm-b.distanciaKm;
+    return difference || a.nomeFantasia.localeCompare(b.nomeFantasia,'pt-BR');
+  });
+}
+function ratingText(w) { return `${w.notaMedia.toFixed(1).replace('.',',')} / 5 · ${w.totalAvaliacoes} avaliações de exemplo`; }
+function workshopCard(w) {
+  return `<article class="workshop-card"><div class="workshop-top"><div class="workshop-avatar">${icon('wrench')}</div><div><h3><a href="#oficina/${w.id}">${escapeHTML(w.nomeFantasia)}</a></h3><small>${escapeHTML(w.cidade)} / ${w.uf}</small></div></div>
+    <span class="tag">Perfil fictício</span><span class="tag">${escapeHTML(w.especialidade)}</span><p>${escapeHTML(w.descricao)}</p>
+    <p><strong>${ratingText(w)}</strong><br>${w.distanciaKm.toLocaleString('pt-BR')} km · distância simulada</p>
+    <a class="plain-button" href="#oficina/${w.id}">Ver perfil ${icon('arrow')}</a></article>`;
+}
+function filterWorkshops() {
+  const result = demo ? matchingWorkshops() : [];
+  const orderLabel = {distance:'Mais próximas',rating:'Melhor avaliadas',reviews:'Mais avaliadas'}[workshopFilters.order];
+  document.querySelector('#filter-summary').textContent = `${orderLabel} · Nota: ${workshopFilters.rating || 'todas'} · Distância: ${workshopFilters.distance ? (workshopFilters.distance === '20+' ? '20 km ou mais' : 'até '+workshopFilters.distance+' km') : 'todas'} · Especialidades: ${workshopFilters.specialties.join(', ') || 'todas'}`;
+  document.querySelector('#workshop-count').textContent = demo ? `${result.length} perfil(is) de exemplo` : 'Nenhuma oficina publicada';
+  document.querySelector('#workshop-results').innerHTML = result.length ? `<div class="workshop-grid">${result.map(workshopCard).join('')}</div>` : `<div class="empty">${icon('pin')}<h3>${demo?'Nenhum resultado para esses filtros':'Estamos preparando os primeiros encontros.'}</h3><p>${demo?'Tente outra combinação de filtros ou limpe a busca.':'Explore os guias ou ative os perfis fictícios para conhecer o diretório.'}</p><button class="button light" ${demo?'data-reset-workshops':'data-show-demo'}>${demo?'Limpar filtros':'Conhecer os perfis de exemplo'}</button></div>`;
+}
+function resetWorkshops() {
+  city = ''; service = ''; workshopQuery = ''; workshopFilters = defaultFilters();
+  renderWorkshops(); document.querySelector('#workshop-search').focus();
+}
+function reviewCard(review) {
+  return `<article class="review-card"><h3>${escapeHTML(review.autor)}</h3><p><strong>${review.estrelas} / 5</strong> · Avaliação fictícia · Sem data real</p><p>${escapeHTML(review.descricao)}</p></article>`;
+}
+function renderWorkshop(id, allReviews = false) {
+  const w = workshops.find(item => String(item.id) === id);
+  if (!w) return renderNotFound('Oficina');
+  main.innerHTML = `<article class="container detail-page">${pageHeader(escapeHTML(w.nomeFantasia), `${escapeHTML(w.cidade)} / ${w.uf} · ${escapeHTML(w.especialidade)}`)}
+    <div class="page-content"><div class="notice"><strong>Perfil fictício · Demonstração</strong><p>Este estabelecimento não existe no diretório real. Endereço, horários, serviços, distância, notas e relatos abaixo são exemplos. Não há contratação ou contato.</p></div>
+      <a class="text-link" href="#oficinas">Voltar à busca</a><p class="detail-meta"><strong>${ratingText(w)}</strong><span>${w.distanciaKm.toLocaleString('pt-BR')} km · distância simulada</span></p>
+      <div class="detail-grid"><div class="reading"><h2>Sobre a oficina de exemplo</h2><p>${escapeHTML(w.descricao)}</p><h2>Serviços oferecidos</h2><div class="chips">${w.servicos.map(value=>`<span class="tag">${escapeHTML(value)}</span>`).join('')}</div>
+        <h2>Endereço fictício</h2><address>${escapeHTML(w.logradouro)}, ${w.numero}<br>${escapeHTML(w.bairro)} · ${escapeHTML(w.cidade)} / ${w.uf}<br>CEP ${w.cep} (exemplo, não utilizar para deslocamento)</address>
+      </div><aside class="about-panel"><h2>Horário de exemplo</h2><p>${escapeHTML(w.horarios)}</p><button class="button dark" disabled aria-describedby="contact-unavailable">WhatsApp</button><p id="contact-unavailable" class="help">Contato indisponível: perfil de exemplo</p></aside></div>
+      <section class="reading"><h2>Avaliações de exemplo</h2><p>Relatos inventados para demonstrar a interface. Não representam clientes reais.</p>${w.avaliacoes.slice(0,3).map(reviewCard).join('')}</section>
+    </div></article>`;
+  document.title = `${w.nomeFantasia} (exemplo) | Garagem`;
+}
+document.addEventListener('click', event => {
+  if (event.target.closest('#filters-toggle')) {
+    const button = document.querySelector('#filters-toggle');
+    const form = document.querySelector('#workshop-filters');
+    form.hidden = !form.hidden;
+    button.setAttribute('aria-expanded', String(!form.hidden));
+    // Reabrir descarta alterações ainda não aplicadas, preservando os resultados exibidos.
+    if (!form.hidden) syncWorkshopFilters();
+  }
+});
+document.addEventListener('submit', event => {
+  if (event.target.id !== 'workshop-filters') return;
+  event.preventDefault();
+  const form = event.target;
+  workshopFilters = {order:form.elements.order.value,rating:Number(form.elements.rating.value),distance:form.elements.distance.value,specialties:[...form.querySelectorAll('[name="specialty"]:checked')].map(input=>input.value)};
+  form.hidden = true;
+  document.querySelector('#filters-toggle').setAttribute('aria-expanded','false');
+  filterWorkshops(); document.querySelector('#workshop-results').focus();
+});
 
 function renderAbout(){main.innerHTML=`<div class="container">${pageHeader('Paixão por carros. Um lugar para começar.','O Garagem nasceu para aproximar quem quer modificar o carro da informação e dos serviços de que precisa.')}<div class="page-content about-grid"><div class="prose"><h2>Mais clareza antes de modificar.</h2><p>Escolher uma peça é só uma parte do projeto. Também é preciso entender o que consultar, como se preparar e quem pode ajudar. A proposta do Garagem é reunir esses primeiros passos em uma experiência simples e gratuita.</p><h2>Um projeto em construção.</h2><p>Esta é a primeira versão do site, baseada no escopo público do projeto. Os guias são roteiros de consulta e não uma certificação de que determinada alteração é permitida. A orientação específica deve ser confirmada nas fontes oficiais e no órgão de trânsito do seu estado.</p><p>O catálogo de oficinas ainda precisa ser validado. Os perfis disponíveis no modo de exemplos são fictícios. Avaliações, contratação, cadastro de oficinas e administração não fazem parte desta versão do site.</p><a class="button dark" href="https://github.com/SalixJs/Projeto_garagem" target="_blank" rel="noopener">Acompanhar no GitHub ↗</a></div><aside class="about-panel"><h3>O que você encontra aqui</h3><ul><li>Temas de modificações organizados por categoria.</li><li>Checklists para preparar suas consultas.</li><li>Links para fontes oficiais.</li><li>Favoritos salvos neste navegador.</li><li>Uma prévia da busca de oficinas.</li></ul><p style="font-size:12px;margin:20px 0 0">Sem conta, sem cobrança. Seus favoritos e marcações são armazenados localmente no seu dispositivo.</p></aside></div></div>`;}
 
-function openWorkshop(id){const w=workshops.find(x=>x.id===Number(id));if(!w)return;document.querySelector('#dialog-body').innerHTML=`<div class="card-meta">Perfil fictício · Demonstração</div><h2 id="dialog-title">${w.nomeFantasia}</h2><p>${w.cidade}, ${w.uf} · ${w.bairro}</p><div class="notice">Este estabelecimento é um exemplo de interface. Nome, região e serviços são fictícios.</div><h3>Especialidade</h3><span class="tag">${w.especialidade}</span><p>${w.descricao}</p><h3>Endereço e contato</h3><p>Não disponíveis: este é um perfil demonstrativo.</p><h3>Valores e horários</h3><p>Não informados. No catálogo definitivo, valores deverão ser fornecidos pela oficina e acompanhados da data de atualização.</p><button class="button light" data-close>Voltar à busca</button>`;dialog.showModal();}
-
-function resetWorkshops(){city="";service="";query="";renderWorkshops();}
-function renderWorkshop(id){renderWorkshops();openWorkshop(id);}
 function renderRegistration(){renderNotFound("Demonstração");}
 function route() {
   if (location.hash === '#main') { main.focus(); return; }
@@ -186,7 +284,6 @@ document.addEventListener('click', event => {
   const button = event.target.closest('button');
   if (!button) return;
   if (button.dataset.save) saveGuide(button.dataset.save);
-  if (button.dataset.workshop) openWorkshop(button.dataset.workshop);
   if (button.dataset.category) {
     category = button.dataset.category;
     document.querySelectorAll('[data-category]').forEach(el => el.setAttribute('aria-pressed', String(el.dataset.category === category)));
@@ -203,7 +300,7 @@ document.addEventListener('click', event => {
 });
 document.addEventListener('input', event => {
   if (event.target.id === 'guide-search') { query = event.target.value; filterGuides(); }
-  if (event.target.id === 'workshop-search') { query = event.target.value; filterWorkshops(); }
+  if (event.target.id === 'workshop-search') { workshopQuery = event.target.value; filterWorkshops(); }
 });
 document.addEventListener('change', event => {
   const target = event.target;
