@@ -19,35 +19,200 @@ const art = {
 };
 const guides = window.GaragemDados.guias;
 const workshops = window.GaragemDados.oficinas;
-function readStore(key,fallback){try{return JSON.parse(localStorage.getItem(key))??fallback;}catch{return fallback;}}
-const loadedSaved=readStore('garagem.saved',[]);
-let saved=Array.isArray(loadedSaved)?loadedSaved.filter(id=>guides.some(g=>g.id===id)):[];
-let checks=readStore('garagem.checks',{});if(!checks||typeof checks!=='object'||Array.isArray(checks)) checks={};
-let category='Todos',query='',demo=false,city='',service='',toastTimer;
-const main=document.querySelector('main'),dialog=document.querySelector('#detail');
-function persist(key,value){try{localStorage.setItem(key,JSON.stringify(value));return true;}catch{toast('O navegador não permitiu salvar. As alterações valem nesta visita.');return false;}}
-function toast(message){const el=document.querySelector('#toast');el.textContent=message;el.classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('visible'),3200);}
-function normalize(s){return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();}
-function updateSaved(){document.querySelector('#saved-count').textContent=saved.length;document.querySelectorAll('[data-save]').forEach(b=>{const on=saved.includes(b.dataset.save);b.setAttribute('aria-pressed',String(on));b.setAttribute('aria-label',`${on?'Remover dos':'Adicionar aos'} meus guias: ${guides.find(g=>g.id===b.dataset.save).titulo}`);if(b.classList.contains('dialog-save')) b.innerHTML=icon('bookmark')+(on?'Guia salvo':'Salvar guia');});}
-function saveGuide(id){if(saved.includes(id)){saved=saved.filter(x=>x!==id);toast('Guia removido dos seus salvos.');}else{saved.push(id);toast('Guia salvo neste navegador.');}persist('garagem.saved',saved);updateSaved();if(location.hash==='#salvos')renderSaved();}
-function guideCard(g){return `<article class="guide-card"><div class="card-art ${g.color}"><svg viewBox="0 0 100 100" aria-hidden="true">${art[g.art]}</svg></div><button class="save" data-save="${g.id}" aria-pressed="${saved.includes(g.id)}" aria-label="Salvar ${g.titulo}">${icon('bookmark')}</button><div class="card-content"><div class="card-meta">${g.categoria}</div><h3>${g.titulo}</h3><p>${g.descricao}</p><div class="card-bottom"><small>Roteiro de consulta</small><button class="plain-button" data-guide="${g.id}">Explorar ${icon('arrow')}</button></div></div></article>`;}
+const main = document.querySelector('main');
+const dialog = document.querySelector('#detail');
+const legalLabels = {
+  permitida: 'Permitida',
+  'exige-regularizacao': 'Exige regularização',
+  'restricao-relevante': 'Restrição relevante'
+};
+// Só favoritos e checklists são persistidos. Cadastro demonstrativo não usa este caminho.
+function readStore(key, fallback) {
+  try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; }
+}
+const loadedSaved = readStore('garagem.saved', []);
+let saved = Array.isArray(loadedSaved) ? [...new Set(loadedSaved.filter(id => guides.some(g => g.id === id)))] : [];
+let checks = readStore('garagem.checks', {});
+if (!checks || typeof checks !== 'object' || Array.isArray(checks)) checks = {};
+let category = 'Todos', query = '', legal = '', demo = false, city = '', service = '', toastTimer;
+const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+const normalize = value => String(value).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+function toast(message) {
+  const el = document.querySelector('#toast');
+  el.textContent = message;
+  el.classList.add('visible');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('visible'), 3200);
+}
+function persist(key, value) {
+  try { localStorage.setItem(key, JSON.stringify(value)); return true; }
+  catch { toast('O navegador não permitiu salvar. As alterações valem nesta visita.'); return false; }
+}
+function updateSaved() {
+  document.querySelector('#saved-count').textContent = saved.length;
+  document.querySelectorAll('[data-save]').forEach(button => {
+    const on = saved.includes(button.dataset.save);
+    const guide = guides.find(g => g.id === button.dataset.save);
+    button.setAttribute('aria-pressed', String(on));
+    button.setAttribute('aria-label', `${on ? 'Remover dos' : 'Adicionar aos'} meus guias: ${guide.titulo}`);
+    if (button.classList.contains('dialog-save')) button.innerHTML = icon('bookmark') + (on ? 'Guia salvo' : 'Salvar guia');
+  });
+}
+function saveGuide(id) {
+  if (!guides.some(g => g.id === id)) return;
+  saved = saved.includes(id) ? saved.filter(value => value !== id) : [...saved, id];
+  persist('garagem.saved', saved);
+  updateSaved();
+  if (location.hash === '#salvos') renderSaved();
+}
+function legalBadge(guide) {
+  return `<span class="legal-badge ${guide.situacaoLegal}">${legalLabels[guide.situacaoLegal]} <small>· a validar</small></span>`;
+}
+function listHTML(items) { return `<ul>${items.map(item => `<li>${escapeHTML(item)}</li>`).join('')}</ul>`; }
+function options(values, allLabel) {
+  return `<option value="">${allLabel}</option>` + [...new Set(values)].sort((a,b) => a.localeCompare(b,'pt-BR')).map(value => `<option value="${escapeHTML(value)}">${escapeHTML(value)}</option>`).join('');
+}
+function guideCard(guide) {
+  return `<article class="guide-card">
+    <div class="card-art ${guide.color}"><svg viewBox="0 0 100 100" aria-hidden="true">${art[guide.art]}</svg></div>
+    <button class="save" data-save="${guide.id}" aria-pressed="${saved.includes(guide.id)}" aria-label="Salvar ${escapeHTML(guide.titulo)}">${icon('bookmark')}</button>
+    <div class="card-content"><div class="card-meta">${escapeHTML(guide.categoria)}</div>
+      <h3><a href="#guia/${guide.id}">${escapeHTML(guide.titulo)}</a></h3>${legalBadge(guide)}
+      <p>${escapeHTML(guide.descricao)}</p>
+      <p class="cost"><strong>${escapeHTML(guide.custoEstimado)}</strong><small>Faixa fictícia de exemplo · a validar</small></p>
+      <div class="card-bottom"><small>Conteúdo a validar</small><a class="plain-button" href="#guia/${guide.id}">Explorar ${icon('arrow')}</a></div>
+    </div></article>`;
+}
+function renderGuides() {
+  category = 'Todos'; query = ''; legal = '';
+  main.innerHTML = `<div class="container">${pageHeader('Toda mudança começa com um plano.', 'Roteiros editoriais para consultar o órgão de trânsito. Classificações e faixas ainda precisam de validação.')}
+    <div class="page-content"><div class="toolbar">
+      <label class="search">${icon('search')}<input id="guide-search" type="search" aria-label="Buscar guias" placeholder="Busque uma modificação"></label>
+      <label class="field">Situação legal<select id="legal-filter">${options(Object.keys(legalLabels),'Todas as situações').replace(/>(permitida|exige-regularizacao|restricao-relevante)</g, (_,key)=>`>${legalLabels[key]}<`)}</select></label>
+    </div><div class="chips" aria-label="Categorias">${['Todos', ...new Set(guides.map(g => g.categoria))].map(value => `<button class="chip" data-category="${escapeHTML(value)}" aria-pressed="${value === 'Todos'}">${escapeHTML(value)}</button>`).join('')}</div>
+    <div class="result-count" id="guide-count" aria-live="polite"></div><div id="guide-results" class="guide-grid"></div></div></div>`;
+  filterGuides();
+}
+function filterGuides() {
+  const result = guides.filter(g => (category === 'Todos' || g.categoria === category) && (!legal || g.situacaoLegal === legal) && normalize(`${g.titulo} ${g.descricao} ${g.categoria} ${legalLabels[g.situacaoLegal]}`).includes(normalize(query)));
+  document.querySelector('#guide-count').textContent = `${result.length} guia(s) encontrado(s)`;
+  document.querySelector('#guide-results').innerHTML = result.length ? result.map(guideCard).join('') : `<div class="empty full-width"><h3>Nenhum guia com essa busca</h3><p>Tente outra palavra ou remova os filtros.</p><button class="button light" data-reset-guides>Limpar filtros</button></div>`;
+  updateSaved();
+}
+function renderSaved() {
+  main.innerHTML = `<div class="container">${pageHeader('Seus próximos projetos.', 'Favoritos e checklists ficam somente neste navegador.')}<div class="page-content">${saved.length ? `<div class="guide-grid">${guides.filter(g => saved.includes(g.id)).map(guideCard).join('')}</div>` : '<div class="empty"><h3>Seu primeiro projeto começa com uma ideia.</h3><p>Salve um guia para encontrá-lo aqui depois.</p><a class="button" href="#guias">Explorar guias</a></div>'}</div></div>`;
+  updateSaved();
+}
+// Chaves v2 não reaproveitam marcações do checklist genérico antigo.
+// Cada chave inclui o texto: se um requisito mudar, ele precisará ser revisado de novo.
+function guideChecklist(guide) {
+  return guide.legalizacao.etapas.flatMap(step => [
+    {key:`v2:${guide.id}:etapa:${step.numero}:${step.titulo}`, text:`Revisar a etapa ${step.numero}: ${step.titulo}`},
+    ...step.documentosNecessarios.map(doc => ({key:`v2:${guide.id}:doc:${step.numero}:${doc}`,text:`Separar ou confirmar: ${doc}`}))
+  ]);
+}
+function renderGuide(id) {
+  const guide = guides.find(g => g.id === id);
+  if (!guide) return renderNotFound('Guia');
+  main.innerHTML = `<article class="container detail-page">
+    ${pageHeader(escapeHTML(guide.titulo), escapeHTML(guide.descricao))}
+    <div class="page-content"><a class="text-link" href="#guias">Voltar aos guias</a>
+      <div class="detail-meta">${legalBadge(guide)}<span>${escapeHTML(guide.categoria)}</span></div>
+      <div class="notice"><strong>Conteúdo a validar</strong><p>Este roteiro editorial não determina se uma modificação é permitida e não substitui o órgão de trânsito. Consulte a viabilidade antes de comprar ou instalar.</p><p>${escapeHTML(guide.enquadramento)}</p></div>
+      <div class="detail-grid"><div class="reading">
+        <section><h2>O que é</h2><p>${escapeHTML(guide.oQueE)}</p></section>
+        <section><h2>Benefícios</h2>${listHTML(guide.beneficios)}</section>
+        <section><h2>Pontos de atenção</h2>${listHTML(guide.pontosAtencao)}</section>
+      </div><aside class="about-panel"><h2>Planeje o projeto</h2><p class="cost"><strong>${escapeHTML(guide.custoEstimado)}</strong><small>${escapeHTML(guide.custoObservacao)}</small></p>
+        <div class="actions"><button class="button" data-legalize>Ver como legalizar</button><button class="button light dialog-save" data-save="${guide.id}">Salvar guia</button></div>
+      </aside></div>
+      <section class="reading legal-section" id="legalizacao" tabindex="-1"><h2>Etapas do processo</h2>
+        <p>Roteiro de consulta, não instrução oficial. Etapas e documentos: a validar. Confirme autorização prévia, ordem e exigências para o seu caso. Valores não são taxas oficiais.</p>
+        <ol class="legal-steps">${guide.legalizacao.etapas.map(step => `<li><h3>${step.numero}. ${escapeHTML(step.titulo)}</h3><p>${escapeHTML(step.descricao)}</p><h4>Documentos para separar ou confirmar</h4>${listHTML(step.documentosNecessarios)}<p><strong>Valor estimado:</strong> ${escapeHTML(step.valor)}</p></li>`).join('')}</ol>
+        <p>Verificação do roteiro: ${escapeHTML(guide.legalizacao.dataAtualizacao)}</p>
+      </section>
+      <section class="source-card reading"><h2>Fonte oficial</h2><p><strong>${escapeHTML(guide.fonte.orgao)}</strong> · ${escapeHTML(guide.fonte.nome)}</p>
+        <a class="text-link" href="${escapeHTML(guide.fonte.referencia)}" target="_blank" rel="noopener noreferrer">Consultar referência oficial ↗</a>
+        <p>Data de verificação: ${escapeHTML(guide.fonte.dataConsulta)}. A existência desta referência não valida o roteiro. Confira alterações posteriores e regras específicas.</p>
+      </section>
+      <section class="reading"><h2>Seu checklist de preparação</h2><p>Marcar um item registra sua preparação, não comprova regularização.</p><p class="progress" id="progress" aria-live="polite"></p>
+        <div class="checklist">${guideChecklist(guide).map(item => `<label><input type="checkbox" data-check="${escapeHTML(item.key)}" ${checks[item.key] === true ? 'checked' : ''}><span>${escapeHTML(item.text)}</span></label>`).join('')}</div>
+      </section><div class="actions section"><a class="button dark" href="#oficinas">Explorar oficinas</a><a class="text-link" href="#guias">Voltar aos guias</a></div>
+    </div></article>`;
+  document.title = `${guide.titulo} | Garagem`;
+  updateSaved(); updateProgress();
+}
+function updateProgress() {
+  const inputs = [...main.querySelectorAll('[data-check]')];
+  const progress = document.querySelector('#progress');
+  if (progress) progress.textContent = `${inputs.filter(input => input.checked).length} de ${inputs.length} itens marcados · Neste navegador`;
+}
+function renderNotFound(type) {
+  main.innerHTML = `<div class="container section empty"><h1>${type} não encontrado</h1><p>O endereço não corresponde ao catálogo atual.</p><a class="button" href="#inicio">Ir ao início</a></div>`;
+}
 const mapArt=`<div class="map-art" aria-label="Ilustração de mapa"><svg viewBox="0 0 500 320" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="500" height="320" fill="#dce5eb"/><path d="M0 80 500 250M50 0 200 320M280 0 390 320M0 270 500 70" stroke="#f9fbfd" stroke-width="23"/><path d="M0 80 500 250M50 0 200 320M280 0 390 320M0 270 500 70" stroke="#c5d2dd" stroke-width="2"/><path d="M420 0C300 100 520 200 440 320" fill="none" stroke="#b5ccdf" stroke-width="30"/><path d="m35 130 65 22 21 63-64-22Z" fill="#bdd2c9"/><path d="m205 35 48 14 19 53-46-17Z" fill="#bdd2c9"/><g fill="#f0804b" stroke="white" stroke-width="4"><circle cx="130" cy="70" r="10"/><circle cx="370" cy="230" r="10"/><circle cx="230" cy="260" r="8"/></g></svg><div class="map-badge">${icon('pin')}<div><strong>O próximo passo é por perto.</strong><small>Explore serviços e especialidades</small></div></div></div>`;
 function renderHome(){main.innerHTML=`<section class="hero"><img class="hero-image" src="assets/porsche.jpg" alt="Porsche escuro em uma estrada" fetchpriority="high"><div class="container"><div class="hero-copy"><div class="hero-label">Seu ponto de partida para modificar</div><h1>Seu carro.<br>Seu projeto.<br>O caminho começa aqui.</h1><p>Da primeira ideia à próxima modificação. Explore guias e encontre o caminho para tirar seu projeto do papel.</p><div class="actions"><a class="button" href="#guias">Explorar guias ${icon('arrow')}</a><a class="button secondary" href="#oficinas">Encontrar oficinas</a></div></div><div class="hero-caption">Paixão por carros. Informação para começar.</div></div></section><section class="benefits" aria-label="Sobre o Garagem"><div class="container"><div class="benefit">${icon('book')}<div><strong>Comece com informação</strong><small>Roteiros para planejar sua modificação</small></div></div><div class="benefit">${icon('pin')}<div><strong>Encontre sua especialidade</strong><small>Busca por região e tipo de serviço</small></div></div><div class="benefit">${icon('shield')}<div><strong>Consulte a fonte</strong><small>Referências oficiais para ir além</small></div></div></div></section><section class="container section"><div class="section-heading"><div><h2>Qual é o seu próximo projeto?</h2><p>Escolha uma modificação e descubra por onde começar.</p></div><a class="text-link" href="#guias">Ver todos os guias ${icon('arrow')}</a></div><div class="guide-grid">${guides.slice(0,3).map(guideCard).join('')}</div></section><section class="container section" style="padding-top:0"><div class="workshop-banner"><div class="banner-copy"><h2>Um bom projeto precisa da oficina certa.</h2><p>Encontre especialidades e compare serviços. O diretório está em formação; conheça a experiência com perfis de exemplo.</p><a href="#oficinas" class="button">Explorar oficinas ${icon('arrow')}</a></div>${mapArt}</div><div class="how"><h2>Da ideia ao próximo passo.</h2><div class="how-grid"><div class="step"><span class="step-number">01</span><div><h3>Escolha a modificação</h3><p>Encontre o tema do seu projeto e organize suas dúvidas.</p></div></div><div class="step"><span class="step-number">02</span><div><h3>Confira as exigências</h3><p>Use as fontes oficiais e confirme o procedimento no seu estado.</p></div></div><div class="step"><span class="step-number">03</span><div><h3>Converse com uma oficina</h3><p>Procure a especialidade certa antes de decidir o próximo passo.</p></div></div></div></div></section>`;}
 function pageHeader(title,desc){return `<div class="page-heading"><a class="breadcrumb" href="#inicio">Início <span aria-hidden="true">/</span></a><h1>${title}</h1><p>${desc}</p></div>`;}
-function renderGuides(){category='Todos';query='';main.innerHTML=`<div class="container">${pageHeader('Toda mudança começa com um plano.','Explore os temas e leve as perguntas certas para o órgão de trânsito e para a oficina.')}<div class="page-content"><div class="toolbar"><label class="search">${icon('search')}<input id="guide-search" type="search" aria-label="Buscar guias" placeholder="Busque uma modificação, como suspensão ou rodas"></label></div><div class="chips" aria-label="Categorias">${['Todos','Suspensão','Rodas e pneus','Visual','Performance'].map(c=>`<button class="chip" data-category="${c}" aria-pressed="${c==='Todos'}">${c}</button>`).join('')}</div><div class="result-count" id="guide-count" aria-live="polite"></div><div id="guide-results" class="guide-grid"></div></div></div>`;filterGuides();}
-function filterGuides(){const list=guides.filter(g=>(category==='Todos'||g.categoria===category)&&normalize(g.titulo+' '+g.descricao+' '+g.categoria).includes(normalize(query)));document.querySelector('#guide-count').textContent=`${list.length} ${list.length===1?'guia encontrado':'guias encontrados'}`;document.querySelector('#guide-results').innerHTML=list.length?list.map(guideCard).join(''):`<div class="empty" style="grid-column:1/-1">${icon('search')}<h3>Nenhum guia com essa busca</h3><p>Tente outra palavra ou remova os filtros.</p><button class="button light" data-reset-guides>Limpar filtros</button></div>`;updateSaved();}
-function renderSaved(){main.innerHTML=`<div class="container">${pageHeader('Seus próximos projetos.','Guarde os temas que você quer explorar. Os favoritos e checklists ficam salvos apenas neste navegador.')}<div class="page-content">${saved.length?`<div class="guide-grid">${guides.filter(g=>saved.includes(g.id)).map(guideCard).join('')}</div>`:`<div class="empty">${icon('bookmark')}<h3>Seu primeiro projeto começa com uma ideia.</h3><p>Toque no marcador de um guia para encontrá-lo aqui depois.</p><a class="button dark" href="#guias">Explorar guias ${icon('arrow')}</a></div>`}</div></div>`;updateSaved();}
+
 function renderWorkshops(){city='';service='';query='';main.innerHTML=`<div class="container">${pageHeader('Encontre quem entende do seu projeto.','Busque por cidade e especialidade para conhecer a experiência do diretório.')}<div class="page-content"><div class="notice"><strong>Nosso diretório está em formação.</strong><p>Ainda não há oficinas verificadas publicadas. Os exemplos abaixo são fictícios e não oferecem contratação ou contato.</p></div><label class="demo-switch"><input type="checkbox" id="demo" ${demo?'checked':''}> Mostrar oficinas de exemplo</label><div class="toolbar"><label class="search">${icon('search')}<input id="workshop-search" type="search" placeholder="Nome, cidade ou serviço" aria-label="Buscar oficinas"></label><select id="city" aria-label="Filtrar por cidade"><option value="">Todas as cidades</option>${[...new Set(workshops.map(w=>w.cidade))].sort().map(c=>`<option>${c}</option>`).join('')}</select><select id="service" aria-label="Filtrar por serviço"><option value="">Todos os serviços</option>${[...new Set(workshops.map(w=>w.especialidade))].sort().map(s=>`<option>${s}</option>`).join('')}</select></div><div class="result-count" id="workshop-count" aria-live="polite"></div><div id="workshop-results"></div></div></div>`;filterWorkshops();}
 function filterWorkshops(){const list=demo?workshops.filter(w=>(!city||w.cidade===city)&&(!service||w.especialidade===service)&&normalize(`${w.nomeFantasia} ${w.cidade} ${w.especialidade}`).includes(normalize(query))):[];document.querySelector('#workshop-count').textContent=demo?`${list.length} ${list.length===1?'perfil de exemplo':'perfis de exemplo'}`:'Nenhuma oficina publicada';document.querySelector('#workshop-results').innerHTML=list.length?`<div class="workshop-grid">${list.map(w=>`<article class="workshop-card"><div class="workshop-top"><div class="workshop-avatar">${icon('wrench')}</div><div><h3>${w.nomeFantasia}</h3><small>${w.cidade}, ${w.uf} · ${w.bairro}</small></div></div><span class="tag">${w.especialidade}</span><span class="tag">Perfil fictício</span><p>${w.descricao}</p><button class="plain-button" data-workshop="${w.id}">Ver perfil ${icon('arrow')}</button></article>`).join('')}</div>`:`<div class="empty">${icon('pin')}<h3>${demo?'Nenhum resultado para esses filtros':'Estamos preparando os primeiros encontros.'}</h3><p>${demo?'Escolha outra cidade ou especialidade para explorar os exemplos.':'Enquanto o diretório ganha forma, explore os guias ou veja como será um perfil de oficina.'}</p><button class="button light" ${demo?'data-reset-workshops':'data-show-demo'}>${demo?'Limpar filtros':'Conhecer os perfis de exemplo'}</button></div>`;}
+
 function renderAbout(){main.innerHTML=`<div class="container">${pageHeader('Paixão por carros. Um lugar para começar.','O Garagem nasceu para aproximar quem quer modificar o carro da informação e dos serviços de que precisa.')}<div class="page-content about-grid"><div class="prose"><h2>Mais clareza antes de modificar.</h2><p>Escolher uma peça é só uma parte do projeto. Também é preciso entender o que consultar, como se preparar e quem pode ajudar. A proposta do Garagem é reunir esses primeiros passos em uma experiência simples e gratuita.</p><h2>Um projeto em construção.</h2><p>Esta é a primeira versão do site, baseada no escopo público do projeto. Os guias são roteiros de consulta e não uma certificação de que determinada alteração é permitida. A orientação específica deve ser confirmada nas fontes oficiais e no órgão de trânsito do seu estado.</p><p>O catálogo de oficinas ainda precisa ser validado. Os perfis disponíveis no modo de exemplos são fictícios. Avaliações, contratação, cadastro de oficinas e administração não fazem parte desta versão do site.</p><a class="button dark" href="https://github.com/SalixJs/Projeto_garagem" target="_blank" rel="noopener">Acompanhar no GitHub ↗</a></div><aside class="about-panel"><h3>O que você encontra aqui</h3><ul><li>Temas de modificações organizados por categoria.</li><li>Checklists para preparar suas consultas.</li><li>Links para fontes oficiais.</li><li>Favoritos salvos neste navegador.</li><li>Uma prévia da busca de oficinas.</li></ul><p style="font-size:12px;margin:20px 0 0">Sem conta, sem cobrança. Seus favoritos e marcações são armazenados localmente no seu dispositivo.</p></aside></div></div>`;}
-const sources=`<div class="source"><a href="https://www.gov.br/transportes/pt-br/assuntos/transito/conteudo-contran/resolucao-contran-no-916-de-28-de-marco-de-2022" target="_blank" rel="noopener">Contran · Resolução nº 916/2022 ↗</a><a href="https://www.gov.br/transportes/pt-br/assuntos/transito/conteudo-Senatran/resolucoes-contran" target="_blank" rel="noopener">Senatran · Índice de resoluções e alterações ↗</a></div>`;
-function openGuide(id){const g=guides.find(g=>g.id===id);if(!g)return;const items=['Anotar o modelo, ano e características atuais do veículo.','Descrever a modificação pretendida e separar referências.','Confirmar com o Detran a permissão e o procedimento aplicável.','Consultar a documentação, inspeções e taxas do caso.','Solicitar orçamento detalhado à oficina após confirmar as exigências.'];document.querySelector('#dialog-body').innerHTML=`<div class="card-meta">${g.categoria} · Roteiro de consulta</div><h2 id="dialog-title">${g.titulo}</h2><p>${g.descricao}</p><div class="notice"><strong>Antes de começar</strong><p>Este roteiro ajuda a preparar uma consulta. Ele não determina se a sua modificação é permitida nem substitui a orientação do órgão de trânsito.</p></div><h3>Defina sua ideia</h3><p>${g.question}</p><h3>O que investigar</h3><p>${g.specific}</p><h3>Seu checklist de preparação</h3><p class="progress" id="progress"></p><div class="checklist">${items.map((t,i)=>`<label><input type="checkbox" data-check="${id}:${i}" ${checks[id+':'+i]?'checked':''}><span>${t}</span></label>`).join('')}</div><h3>Fontes para a sua consulta</h3>${sources}<p class="dialog-date">Roteiro editorial: 12/11/2026. Confira também as alterações posteriores das normas e o procedimento do seu estado. Custos: consulte os órgãos e prestadores responsáveis.</p><div class="actions"><button class="button light dialog-save" data-save="${id}" aria-pressed="false">Salvar guia</button><button class="button dark" data-find-workshops="${g.categoria}">Explorar oficinas ${icon('arrow')}</button></div>`;updateProgress();updateSaved();dialog.showModal();}
-function updateProgress(){const inputs=[...dialog.querySelectorAll('[data-check]')];const p=document.querySelector('#progress');if(p)p.textContent=`${inputs.filter(x=>x.checked).length} de ${inputs.length} etapas marcadas · Salvo neste navegador`;}
+
 function openWorkshop(id){const w=workshops.find(x=>x.id===Number(id));if(!w)return;document.querySelector('#dialog-body').innerHTML=`<div class="card-meta">Perfil fictício · Demonstração</div><h2 id="dialog-title">${w.nomeFantasia}</h2><p>${w.cidade}, ${w.uf} · ${w.bairro}</p><div class="notice">Este estabelecimento é um exemplo de interface. Nome, região e serviços são fictícios.</div><h3>Especialidade</h3><span class="tag">${w.especialidade}</span><p>${w.descricao}</p><h3>Endereço e contato</h3><p>Não disponíveis: este é um perfil demonstrativo.</p><h3>Valores e horários</h3><p>Não informados. No catálogo definitivo, valores deverão ser fornecidos pela oficina e acompanhados da data de atualização.</p><button class="button light" data-close>Voltar à busca</button>`;dialog.showModal();}
-function route(){if(location.hash==='#main'){main.focus();return;}const view=location.hash.slice(1)||'inicio';if(dialog.open)dialog.close();({inicio:renderHome,guias:renderGuides,oficinas:renderWorkshops,salvos:renderSaved,sobre:renderAbout}[view]||renderHome)();document.querySelectorAll('[data-nav]').forEach(a=>{const on=a.dataset.nav===view;a.classList.toggle('active',on);if(on)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});updateSaved();document.title=({guias:'Guias',oficinas:'Oficinas',salvos:'Meus guias',sobre:'O projeto'}[view]||'Seu carro. Seu projeto.')+' | Garagem';window.scrollTo(0,0);}
-document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.save)saveGuide(b.dataset.save);if(b.dataset.guide)openGuide(b.dataset.guide);if(b.dataset.workshop)openWorkshop(b.dataset.workshop);if(b.dataset.category){category=b.dataset.category;document.querySelectorAll('[data-category]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.category===category)));filterGuides();}if(b.hasAttribute('data-reset-guides')){category='Todos';query='';document.querySelector('#guide-search').value='';document.querySelectorAll('[data-category]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.category==='Todos')));filterGuides();}if(b.hasAttribute('data-show-demo')){demo=true;document.querySelector('#demo').checked=true;filterWorkshops();}if(b.hasAttribute('data-reset-workshops')){city='';service='';query='';['city','service','workshop-search'].forEach(id=>document.getElementById(id).value='');filterWorkshops();}if(b.hasAttribute('data-find-workshops')){const next=b.dataset.findWorkshops;dialog.close();location.hash='oficinas';setTimeout(()=>{service=next;const s=document.querySelector('#service');if(s){s.value=service;filterWorkshops();}},0);}if(b.hasAttribute('data-close')||b.classList.contains('dialog-close'))dialog.close();});
-document.addEventListener('input',e=>{if(e.target.id==='guide-search'){query=e.target.value;filterGuides();}if(e.target.id==='workshop-search'){query=e.target.value;filterWorkshops();}});
-document.addEventListener('change',e=>{if(e.target.id==='demo'){demo=e.target.checked;filterWorkshops();}if(e.target.id==='city'){city=e.target.value;filterWorkshops();}if(e.target.id==='service'){service=e.target.value;filterWorkshops();}if(e.target.dataset.check){checks[e.target.dataset.check]=e.target.checked;persist('garagem.checks',checks);updateProgress();}});
-dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close();}});
-document.querySelectorAll('[data-icon]').forEach(el=>el.innerHTML=icon(el.dataset.icon));
-window.addEventListener('hashchange',()=>{route();main.focus({preventScroll:true});});route();
+
+function resetWorkshops(){city="";service="";query="";renderWorkshops();}
+function renderWorkshop(id){renderWorkshops();openWorkshop(id);}
+function renderRegistration(){renderNotFound("Demonstração");}
+function route() {
+  if (location.hash === '#main') { main.focus(); return; }
+  const [view = 'inicio', id, child] = (location.hash.slice(1) || 'inicio').split('/');
+  if (dialog.open) dialog.close();
+  document.title = 'Garagem — Seu carro. Seu projeto.';
+  if (view === 'guia') renderGuide(id);
+  else if (view === 'oficina') renderWorkshop(id, child === 'avaliacoes');
+  else if (view === 'cadastro') renderRegistration();
+  else ({inicio:renderHome,guias:renderGuides,oficinas:renderWorkshops,salvos:renderSaved,sobre:renderAbout}[view] || (() => renderNotFound('Página')))();
+  const section = view === 'guia' ? 'guias' : view === 'oficina' ? 'oficinas' : view;
+  document.querySelectorAll('[data-nav]').forEach(link => {
+    const active = link.dataset.nav === section;
+    link.classList.toggle('active', active);
+    if (active) link.setAttribute('aria-current', 'page'); else link.removeAttribute('aria-current');
+  });
+  updateSaved(); window.scrollTo(0,0);
+}
+// Delegação de eventos mantém os controles funcionando após trocar a página por hash.
+document.addEventListener('click', event => {
+  const button = event.target.closest('button');
+  if (!button) return;
+  if (button.dataset.save) saveGuide(button.dataset.save);
+  if (button.dataset.workshop) openWorkshop(button.dataset.workshop);
+  if (button.dataset.category) {
+    category = button.dataset.category;
+    document.querySelectorAll('[data-category]').forEach(el => el.setAttribute('aria-pressed', String(el.dataset.category === category)));
+    filterGuides();
+  }
+  if (button.hasAttribute('data-reset-guides')) renderGuides();
+  if (button.hasAttribute('data-show-demo')) { demo = true; document.querySelector('#demo').checked = true; filterWorkshops(); }
+  if (button.hasAttribute('data-reset-workshops')) resetWorkshops();
+  if (button.hasAttribute('data-legalize')) {
+    const section = document.querySelector('#legalizacao');
+    section.focus({preventScroll:true}); section.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
+  }
+  if (button.hasAttribute('data-close') || button.classList.contains('dialog-close')) dialog.close();
+});
+document.addEventListener('input', event => {
+  if (event.target.id === 'guide-search') { query = event.target.value; filterGuides(); }
+  if (event.target.id === 'workshop-search') { query = event.target.value; filterWorkshops(); }
+});
+document.addEventListener('change', event => {
+  const target = event.target;
+  if (target.id === 'legal-filter') { legal = target.value; filterGuides(); }
+  if (target.id === 'demo') { demo = target.checked; filterWorkshops(); }
+  if (target.id === 'city') { city = target.value; filterWorkshops(); }
+  if (target.id === 'service') { service = target.value; filterWorkshops(); }
+  if (target.dataset.check) { checks[target.dataset.check] = target.checked; persist('garagem.checks', checks); updateProgress(); }
+});
+document.querySelectorAll('[data-icon]').forEach(el => { el.innerHTML = icon(el.dataset.icon); });
+window.addEventListener('hashchange', () => { route(); main.focus({preventScroll:true}); });
+route();
