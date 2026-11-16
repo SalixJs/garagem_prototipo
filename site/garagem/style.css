@@ -49,3 +49,11 @@ legend{font-weight:600;padding:0 6px}
 address{font-style:normal;line-height:1.9;color:var(--muted)}
 .workshop-avatar{flex-shrink:0}.workshop-top>div{min-width:0}.workshop-card h3{overflow-wrap:anywhere}
 @media(max-width:650px){.form-grid{grid-template-columns:1fr}.filters-panel{padding:18px}.workshop-card{padding:22px}.choice-chip{padding:8px 11px}}
+
+.wizard-steps{display:flex;flex-wrap:wrap;gap:12px;list-style:none;padding:0;margin:0 0 24px}
+.wizard-steps li{font-size:13px;padding:8px 12px;border-bottom:3px solid var(--line)}
+.wizard-steps [aria-current=step]{border-color:var(--orange);font-weight:700}
+#registration-form{max-width:850px}#role-picker{max-width:850px}
+.form-error{color:var(--ink);font-weight:600;border-left:3px solid var(--orange);padding-left:12px}
+.form-error:empty{display:none}textarea:focus-visible{outline:3px solid var(--blue);outline-offset:4px}
+#registration-restart{margin:12px}

@@ -223,19 +223,24 @@ function resetWorkshops() {
   city = ''; service = ''; workshopQuery = ''; workshopFilters = defaultFilters();
   renderWorkshops(); document.querySelector('#workshop-search').focus();
 }
+function renderWorkshopReviews(w) {
+  main.innerHTML = `<div class="container detail-page">${pageHeader('Avaliações completas',escapeHTML(w.nomeFantasia))}<div class="page-content reading"><div class="notice"><strong>Fase 2 · Demonstração</strong><p>Todos os relatos e notas são fictícios. Não é possível publicar avaliações nesta versão.</p></div><a class="text-link" href="#oficina/${w.id}">Voltar ao perfil</a><p class="detail-meta">${ratingText(w)}</p>${w.avaliacoes.map(reviewCard).join('')}</div></div>`;
+  document.title = 'Avaliações de exemplo | Garagem';
+}
 function reviewCard(review) {
   return `<article class="review-card"><h3>${escapeHTML(review.autor)}</h3><p><strong>${review.estrelas} / 5</strong> · Avaliação fictícia · Sem data real</p><p>${escapeHTML(review.descricao)}</p></article>`;
 }
 function renderWorkshop(id, allReviews = false) {
   const w = workshops.find(item => String(item.id) === id);
   if (!w) return renderNotFound('Oficina');
+  if (allReviews) return renderWorkshopReviews(w);
   main.innerHTML = `<article class="container detail-page">${pageHeader(escapeHTML(w.nomeFantasia), `${escapeHTML(w.cidade)} / ${w.uf} · ${escapeHTML(w.especialidade)}`)}
     <div class="page-content"><div class="notice"><strong>Perfil fictício · Demonstração</strong><p>Este estabelecimento não existe no diretório real. Endereço, horários, serviços, distância, notas e relatos abaixo são exemplos. Não há contratação ou contato.</p></div>
       <a class="text-link" href="#oficinas">Voltar à busca</a><p class="detail-meta"><strong>${ratingText(w)}</strong><span>${w.distanciaKm.toLocaleString('pt-BR')} km · distância simulada</span></p>
       <div class="detail-grid"><div class="reading"><h2>Sobre a oficina de exemplo</h2><p>${escapeHTML(w.descricao)}</p><h2>Serviços oferecidos</h2><div class="chips">${w.servicos.map(value=>`<span class="tag">${escapeHTML(value)}</span>`).join('')}</div>
         <h2>Endereço fictício</h2><address>${escapeHTML(w.logradouro)}, ${w.numero}<br>${escapeHTML(w.bairro)} · ${escapeHTML(w.cidade)} / ${w.uf}<br>CEP ${w.cep} (exemplo, não utilizar para deslocamento)</address>
       </div><aside class="about-panel"><h2>Horário de exemplo</h2><p>${escapeHTML(w.horarios)}</p><button class="button dark" disabled aria-describedby="contact-unavailable">WhatsApp</button><p id="contact-unavailable" class="help">Contato indisponível: perfil de exemplo</p></aside></div>
-      <section class="reading"><h2>Avaliações de exemplo</h2><p>Relatos inventados para demonstrar a interface. Não representam clientes reais.</p>${w.avaliacoes.slice(0,3).map(reviewCard).join('')}</section>
+      <section class="reading"><h2>Avaliações de exemplo</h2><p>Relatos inventados para demonstrar a interface. Não representam clientes reais.</p>${w.avaliacoes.slice(0,3).map(reviewCard).join('')}<a class="button light" href="#oficina/${w.id}/avaliacoes">Ver todas as avaliações · demonstração</a></section>
     </div></article>`;
   document.title = `${w.nomeFantasia} (exemplo) | Garagem`;
 }
@@ -259,11 +264,153 @@ document.addEventListener('submit', event => {
   filterWorkshops(); document.querySelector('#workshop-results').focus();
 });
 
-function renderAbout(){main.innerHTML=`<div class="container">${pageHeader('Paixão por carros. Um lugar para começar.','O Garagem nasceu para aproximar quem quer modificar o carro da informação e dos serviços de que precisa.')}<div class="page-content about-grid"><div class="prose"><h2>Mais clareza antes de modificar.</h2><p>Escolher uma peça é só uma parte do projeto. Também é preciso entender o que consultar, como se preparar e quem pode ajudar. A proposta do Garagem é reunir esses primeiros passos em uma experiência simples e gratuita.</p><h2>Um projeto em construção.</h2><p>Esta é a primeira versão do site, baseada no escopo público do projeto. Os guias são roteiros de consulta e não uma certificação de que determinada alteração é permitida. A orientação específica deve ser confirmada nas fontes oficiais e no órgão de trânsito do seu estado.</p><p>O catálogo de oficinas ainda precisa ser validado. Os perfis disponíveis no modo de exemplos são fictícios. Avaliações, contratação, cadastro de oficinas e administração não fazem parte desta versão do site.</p><a class="button dark" href="https://github.com/SalixJs/Projeto_garagem" target="_blank" rel="noopener">Acompanhar no GitHub ↗</a></div><aside class="about-panel"><h3>O que você encontra aqui</h3><ul><li>Temas de modificações organizados por categoria.</li><li>Checklists para preparar suas consultas.</li><li>Links para fontes oficiais.</li><li>Favoritos salvos neste navegador.</li><li>Uma prévia da busca de oficinas.</li></ul><p style="font-size:12px;margin:20px 0 0">Sem conta, sem cobrança. Seus favoritos e marcações são armazenados localmente no seu dispositivo.</p></aside></div></div>`;}
+function renderAbout(){main.innerHTML=`<div class="container">${pageHeader('Paixão por carros. Um lugar para começar.','O Garagem nasceu para aproximar quem quer modificar o carro da informação e dos serviços de que precisa.')}<div class="page-content about-grid"><div class="prose"><h2>Mais clareza antes de modificar.</h2><p>Escolher uma peça é só uma parte do projeto. Também é preciso entender o que consultar, como se preparar e quem pode ajudar. A proposta do Garagem é reunir esses primeiros passos em uma experiência simples e gratuita.</p><h2>Um projeto em construção.</h2><p>Esta é a primeira versão do site, baseada no escopo público do projeto. Os guias são roteiros de consulta e não uma certificação de que determinada alteração é permitida. A orientação específica deve ser confirmada nas fontes oficiais e no órgão de trânsito do seu estado.</p><p>O catálogo de oficinas ainda precisa ser validado. Os perfis disponíveis no modo de exemplos são fictícios. Avaliações e cadastro aparecem apenas como demonstrações de uma fase futura, sem salvar dados ou criar contas. Contratação e administração não estão disponíveis.</p><a class="button dark" href="https://github.com/SalixJs/Projeto_garagem" target="_blank" rel="noopener">Acompanhar no GitHub ↗</a></div><aside class="about-panel"><a class="button light" href="#cadastro">Criar conta · demonstração</a><h3>O que você encontra aqui</h3><ul><li>Temas de modificações organizados por categoria.</li><li>Checklists para preparar suas consultas.</li><li>Links para fontes oficiais.</li><li>Favoritos salvos neste navegador.</li><li>Uma prévia da busca de oficinas.</li></ul><p style="font-size:12px;margin:20px 0 0">Sem conta, sem cobrança. Seus favoritos e marcações são armazenados localmente no seu dispositivo.</p></aside></div></div>`;}
 
-function renderRegistration(){renderNotFound("Demonstração");}
+// Fase 2: demonstração. Os valores existem apenas nos controles do formulário.
+// Não há senha, armazenamento, requisição, upload, criação de conta ou login.
+let registrationStep = 0;
+let registrationRole = 'usuario';
+const ownerSteps = ['Responsável','Dados da oficina','Endereço','Serviços e horários','Logo e fotos'];
+function validCNPJ(value) {
+  const clean = value.toUpperCase().replace(/[.\/\-\s]/g,'');
+  if (!/^[A-Z0-9]{12}\d{2}$/.test(clean) || /^(\d)\1{13}$/.test(clean)) return false;
+  // Módulo 11, incluindo CNPJ alfanumérico: valor de cada caractere = ASCII - 48.
+  // Referência: Receita Federal, Manual de Cálculo do DV do CNPJ (ver LEIA-ME).
+  const digit = base => {
+    let sum = 0, weight = 2;
+    for (let i = base.length-1; i >= 0; i--) {
+      sum += (base.charCodeAt(i)-48)*weight;
+      weight = weight === 9 ? 2 : weight+1;
+    }
+    const remainder = sum % 11;
+    return remainder < 2 ? '0' : String(11-remainder);
+  };
+  const base = clean.slice(0,12), first = digit(base);
+  return clean.slice(-2) === first + digit(base+first);
+}
+function renderRegistration() {
+  registrationStep = 0; registrationRole = 'usuario';
+  main.innerHTML = `<div class="container detail-page">${pageHeader('Criar conta · Demonstração','Conheça o fluxo previsto para uma próxima fase do Garagem.')}
+    <div class="page-content"><div class="notice"><strong>Nenhuma conta será criada.</strong><p>Use somente dados de teste. Nada deste formulário é salvo ou enviado pelo site. Não há campo de senha nem login. Ao concluir, cancelar ou sair da página, os campos são descartados.</p></div>
+      <fieldset id="role-picker"><legend>Qual experiência deseja conhecer?</legend><div class="chips"><label class="choice-chip"><input type="radio" name="demo-role" value="usuario" checked> Usuário</label><label class="choice-chip"><input type="radio" name="demo-role" value="oficina"> Dono de oficina</label></div></fieldset>
+      <p id="registration-progress" role="status"></p><ol class="wizard-steps" id="wizard-steps"></ol>
+      <form id="registration-form" autocomplete="off" novalidate>
+        <fieldset data-registration-step="0"><legend>Responsável</legend><div class="form-grid">
+          <label class="field">Nome de teste<input id="demo-name" required minlength="2" maxlength="150" autocomplete="off"></label>
+          <label class="field">E-mail de teste<input id="demo-email" type="email" required maxlength="150" autocomplete="off" placeholder="pessoa@example.com"></label>
+        </div><p class="help">O e-mail serve apenas para demonstrar a validação de formato. Não será gravado nem usado para enviar mensagens.</p></fieldset>
+        <fieldset data-registration-step="1" hidden disabled><legend>Dados da oficina</legend><div class="form-grid">
+          <label class="field">Nome fantasia de teste<input required minlength="2" maxlength="150"></label>
+          <label class="field">Razão social de teste<input required minlength="2" maxlength="150"></label>
+          <label class="field">CNPJ de teste<input id="demo-cnpj" required maxlength="18" placeholder="12.ABC.345/01DE-35" aria-describedby="cnpj-help"></label>
+          <label class="field">Descrição de teste<textarea required minlength="10" maxlength="600" rows="3"></textarea></label>
+        </div><p class="help" id="cnpj-help">Validação de formato e dígitos verificadores, sem consulta à Receita e sem comprovar existência. Exemplo técnico para teste: 12.ABC.345/01DE-35.</p></fieldset>
+        <fieldset data-registration-step="2" hidden disabled><legend>Endereço</legend><div class="form-grid">
+          <label class="field">CEP de teste<input id="demo-cep" inputmode="numeric" required maxlength="9" placeholder="00000-000"></label>
+          <label class="field">Logradouro de teste<input required maxlength="150"></label>
+          <label class="field">Número de teste<input required maxlength="10"></label>
+          <label class="field">Bairro de teste<input required maxlength="100"></label>
+          <label class="field">Cidade de teste<input required maxlength="100"></label>
+          <label class="field">UF<select required><option value="">Selecione</option>${'AC AL AP AM BA CE DF ES GO MA MT MS MG PA PB PR PE PI RJ RN RS RO RR SC SP SE TO'.split(' ').map(uf=>`<option>${uf}</option>`).join('')}</select></label>
+        </div><p class="help">O CEP é verificado apenas pelo formato de oito dígitos. Não há busca de endereço.</p></fieldset>
+        <fieldset data-registration-step="3" hidden disabled><legend>Serviços e horários</legend><p>Selecione ao menos um serviço de exemplo.</p><div class="chips">${specialties.map(value=>`<label class="choice-chip"><input type="checkbox" name="demo-service" value="${escapeHTML(value)}">${escapeHTML(value)}</label>`).join('')}</div>
+          <label class="field">Horários de teste<textarea required minlength="5" maxlength="255" rows="3" placeholder="Segunda a sexta, 8h às 18h; fim de semana fechado"></textarea></label>
+        </fieldset>
+        <fieldset data-registration-step="4" hidden disabled><legend>Logo e fotos</legend><div class="form-grid">
+          <label class="field">Logo opcional<input id="demo-logo" type="file" accept="image/png,image/jpeg,image/webp"></label>
+          <label class="field">Fotos opcionais<input id="demo-photos" type="file" accept="image/png,image/jpeg,image/webp" multiple></label>
+        </div><p class="help">Use arquivos de teste: PNG, JPEG ou WebP, até 5 MB por arquivo e até 6 fotos. Apenas tipo, quantidade e tamanho são conferidos no navegador. Não há leitura do conteúdo nem upload.</p></fieldset>
+        <p id="registration-error" class="form-error" role="alert"></p>
+        <div class="actions"><button type="button" class="button light" id="registration-back" hidden>Voltar</button><button type="submit" class="button" id="registration-next">Concluir demonstração</button><button type="button" class="button light" id="registration-cancel">Cancelar e descartar</button></div>
+      </form>
+    </div></div>`;
+  showRegistrationStep();
+}
+function showRegistrationStep() {
+  const count = registrationRole === 'oficina' ? 5 : 1;
+  document.querySelectorAll('[data-registration-step]').forEach(fieldset => {
+    const active = Number(fieldset.dataset.registrationStep) === registrationStep;
+    fieldset.hidden = !active; fieldset.disabled = !active;
+  });
+  document.querySelector('#wizard-steps').innerHTML = (registrationRole === 'oficina' ? ownerSteps : ['Responsável']).map((name,index)=>`<li ${index === registrationStep?'aria-current="step"':''}>${index+1}. ${name}</li>`).join('');
+  document.querySelector('#registration-progress').textContent = `Etapa ${registrationStep+1} de ${count} · ${ownerSteps[registrationStep]}`;
+  document.querySelector('#registration-back').hidden = registrationStep === 0;
+  document.querySelector('#registration-next').textContent = registrationStep === count-1 ? 'Concluir demonstração' : 'Continuar';
+  document.querySelector('#registration-error').textContent = '';
+}
+function validateRegistrationStep() {
+  const fieldset = document.querySelector(`[data-registration-step="${registrationStep}"]`);
+  const fields = [...fieldset.querySelectorAll('input,select,textarea')];
+  fields.forEach(field => field.setCustomValidity(''));
+  fields.filter(field=>field.required && ['text','textarea'].includes(field.type)).forEach(field=>{
+    if (!field.value.trim()) field.setCustomValidity('Preencha este campo com dados de teste.');
+  });
+  if (registrationStep === 0) {
+    const email = document.querySelector('#demo-email');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) email.setCustomValidity('Digite um e-mail de teste, como pessoa@example.com.');
+  }
+  if (registrationStep === 1) {
+    const cnpj = document.querySelector('#demo-cnpj');
+    if (!validCNPJ(cnpj.value)) cnpj.setCustomValidity('Confira o formato e os dígitos verificadores do CNPJ de teste.');
+  }
+  if (registrationStep === 2) {
+    const cep = document.querySelector('#demo-cep');
+    if (!/^\d{5}-?\d{3}$/.test(cep.value)) cep.setCustomValidity('Digite oito dígitos, com ou sem hífen.');
+  }
+  if (registrationStep === 3 && !fieldset.querySelector('[name="demo-service"]:checked')) {
+    fields.find(field=>field.name === 'demo-service').setCustomValidity('Selecione ao menos um serviço.');
+  }
+  if (registrationStep === 4) {
+    fields.forEach(field=>{
+      const files = [...field.files];
+      if (files.length > (field.multiple ? 6 : 1) || files.some(file=>!['image/png','image/jpeg','image/webp'].includes(file.type) || file.size > 5*1024*1024)) field.setCustomValidity('Use PNG, JPEG ou WebP de até 5 MB; no máximo 6 fotos.');
+    });
+  }
+  const invalid = fields.find(field=>!field.checkValidity());
+  if (invalid) {
+    document.querySelector('#registration-error').textContent = invalid.validationMessage;
+    invalid.reportValidity(); invalid.focus(); return false;
+  }
+  return true;
+}
+function finishRegistration() {
+  document.querySelector('#registration-form').reset();
+  main.innerHTML = `<div class="container section"><div class="empty"><h1>Demonstração concluída</h1><p>Os campos foram descartados. Nenhuma conta foi criada e nenhum dado ou arquivo foi salvo ou enviado.</p><a class="button" href="#oficinas">Explorar oficinas</a><button class="button light" id="registration-restart">Recomeçar demonstração</button></div></div>`;
+  main.focus();
+}
+document.addEventListener('change', event => {
+  if (event.target.name !== 'demo-role') return;
+  document.querySelector('#registration-form').reset();
+  registrationRole = event.target.value; registrationStep = 0; showRegistrationStep();
+});
+document.addEventListener('input', event => {
+  if (event.target.closest('#registration-form')) {
+    event.target.setCustomValidity('');
+    document.querySelector('#registration-error').textContent = '';
+  }
+});
+document.addEventListener('submit', event => {
+  if (event.target.id !== 'registration-form') return;
+  event.preventDefault();
+  if (!validateRegistrationStep()) return;
+  if (registrationRole === 'usuario' || registrationStep === 4) finishRegistration();
+  else {
+    registrationStep++; showRegistrationStep();
+    document.querySelector(`[data-registration-step="${registrationStep}"] input`).focus();
+  }
+});
+document.addEventListener('click', event => {
+  if (event.target.closest('#registration-back')) { registrationStep--; showRegistrationStep(); document.querySelector(`[data-registration-step="${registrationStep}"] input`).focus(); }
+  if (event.target.closest('#registration-cancel')) { document.querySelector('#registration-form').reset(); location.hash = 'inicio'; }
+  if (event.target.closest('#registration-restart')) renderRegistration();
+});
+// Também limpa controles se o navegador guardar a página no cache de navegação.
+window.addEventListener('pagehide', () => document.querySelector('#registration-form')?.reset());
+window.addEventListener('pageshow', event => { if (event.persisted && location.hash === '#cadastro') renderRegistration(); });
+
 function route() {
   if (location.hash === '#main') { main.focus(); return; }
+  document.querySelector('#registration-form')?.reset();
   const [view = 'inicio', id, child] = (location.hash.slice(1) || 'inicio').split('/');
   if (dialog.open) dialog.close();
   document.title = 'Garagem — Seu carro. Seu projeto.';
