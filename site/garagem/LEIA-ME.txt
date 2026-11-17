@@ -3,7 +3,7 @@ GARAGEM — SITE PARA XAMPP
 Acesso: http://localhost/garagem/
 No painel do XAMPP, inicie o Apache. MySQL não é necessário nesta versão.
 
-Arquivos: index.html, style.css, app.js e assets/.
+Arquivos: index.html, style.css, dados.js, app.js e assets/.
 Não há instalação de pacotes nem compilação.
 
 Esta entrega é o site (frontend), conforme solicitado. Inclui navegação,
@@ -26,3 +26,29 @@ Fontes: Barlow Condensed e DM Sans, Google Fonts, com fallback local.
 Ilustrações e ícones vetoriais criados para esta interface.
 
 Para editar: abra esta pasta no Visual Studio Code.
+
+ATUALIZAÇÃO DO PROTÓTIPO — 16/11/2026
+
+Copie a pasta inteira site/garagem para htdocs/garagem, incluindo dados.js.
+Abra http://localhost/garagem/ após iniciar o Apache.
+Esta edição está na cópia do repositório; a instalação no XAMPP é separada.
+
+dados.js é carregado antes de app.js e contém 11 guias e 8 oficinas fictícias.
+Detalhes usam #guia/<id>, #oficina/<id> e #oficina/<id>/avaliacoes.
+Filtros de guias incluem situação legal; oficinas têm busca, cidade, serviço,
+especialidades, nota, distância simulada e ordenação.
+
+Classificações e roteiros são editoriais e a validar. Faixas de custo são
+exemplos fictícios, não cotações ou taxas oficiais. A referência 916/2022
+foi mantida com TODO de conferência.
+
+#cadastro é demonstração: Usuário tem uma etapa; Dono de oficina tem cinco.
+Não cria conta, não tem senha, não envia nem grava os dados do formulário.
+Campos e arquivos são descartados ao concluir, cancelar ou sair.
+Não há upload, consulta de CEP nem consulta cadastral do CNPJ.
+
+Persistência restrita a favoritos e checklists no navegador. Checklists
+específicos usam chaves v2, sem reaproveitar os itens genéricos anteriores.
+
+Leia VALIDACAO-E-MAPEAMENTO.md para campos SQL, lacunas e verificações.
+O MANIFESTO.sha256 da raiz descreve o pacote original, não esta edição.

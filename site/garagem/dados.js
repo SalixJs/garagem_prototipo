@@ -38,7 +38,7 @@ const guias = [
             "Ficha com modelo, ano e configuração original",
             "Descrição do kit e da altura pretendida"
           ],
-          "valor": "Faixa a validar — solicitar orçamento; não é taxa oficial"
+          "valor": "A validar — solicitar orçamento"
         },
         {
           "numero": 2,
@@ -48,7 +48,7 @@ const guias = [
             "Especificação de molas e amortecedores",
             "Comprovantes de peças e serviço a consultar"
           ],
-          "valor": "Faixa a validar — solicitar orçamento; não é taxa oficial"
+          "valor": "A validar — solicitar orçamento"
         },
         {
           "numero": 3,
@@ -58,7 +58,7 @@ const guias = [
             "Relatório da inspeção, quando exigido",
             "CSV e documento do veículo, conforme orientação"
           ],
-          "valor": "Faixa a validar — solicitar orçamento; não é taxa oficial"
+          "valor": "A validar — solicitar orçamento"
         }
       ]
     },
@@ -103,7 +103,7 @@ const guias = [
             "Ficha do veículo e especificações do manual",
             "Medidas e índices do pneu original"
           ],
-          "valor": "Faixa a validar — solicitar orçamento; não é taxa oficial"
+          "valor": "A validar — solicitar orçamento"
         },
         {
           "numero": 2,
@@ -113,7 +113,7 @@ const guias = [
             "Ficha técnica da roda pretendida",
             "Ficha técnica dos pneus pretendidos"
           ],
-          "valor": "Faixa a validar — solicitar orçamento; não é taxa oficial"
+          "valor": "A validar — solicitar orçamento"
         },
         {
           "numero": 3,
@@ -123,7 +123,7 @@ const guias = [
             "Orçamento de montagem e balanceamento",
             "Orientação do órgão sobre a mudança de medidas"
           ],
-          "valor": "Faixa a validar — solicitar orçamento; não é taxa oficial"
+          "valor": "A validar — solicitar orçamento"
         }
       ]
     },
@@ -168,7 +168,7 @@ const guias = [
             "Fotos da cor atual",
             "Esboço das áreas e da cor pretendida"
           ],
-          "valor": "Faixa a validar — solicitar orçamento; não é taxa oficial"
+          "valor": "A validar — solicitar orçamento"
         },
         {
           "numero": 2,
@@ -178,7 +178,7 @@ const guias = [
             "Documento do veículo",
             "Orientação recebida para alteração de cor"
           ],
-          "valor": "Faixa a validar — solicitar orçamento; não é taxa oficial"
+          "valor": "A validar — solicitar orçamento"
         },
         {
           "numero": 3,
@@ -188,7 +188,7 @@ const guias = [
             "Comprovante do serviço, se solicitado",
             "Resultado de vistoria, quando exigida"
           ],
-          "valor": "Faixa a validar — solicitar orçamento; não é taxa oficial"
+          "valor": "A validar — solicitar orçamento"
         }
       ]
     },
@@ -233,7 +233,7 @@ const guias = [
             "Identificação do motor atual",
             "Descrição e procedência do motor ou componentes propostos"
           ],
-          "valor": "Faixa a validar — solicitar orçamento; não é taxa oficial"
+          "valor": "A validar — solicitar orçamento"
         },
         {
           "numero": 2,
@@ -243,7 +243,7 @@ const guias = [
             "Memorial do projeto de motor",
             "Comprovantes de componentes e instalação a consultar"
           ],
-          "valor": "Faixa a validar — solicitar orçamento; não é taxa oficial"
+          "valor": "A validar — solicitar orçamento"
         },
         {
           "numero": 3,
@@ -253,7 +253,7 @@ const guias = [
             "Documentos de procedência solicitados",
             "Resultados de inspeção e CSV, quando exigidos"
           ],
-          "valor": "Faixa a validar — solicitar orçamento; não é taxa oficial"
+          "valor": "A validar — solicitar orçamento"
         }
       ]
     },
@@ -298,7 +298,7 @@ const guias = [
             "Identificação do farol original",
             "Especificação da fonte luminosa prevista no manual"
           ],
-          "valor": "Faixa a validar — solicitar orçamento; não é taxa oficial"
+          "valor": "A validar — solicitar orçamento"
         },
         {
           "numero": 2,
@@ -308,7 +308,7 @@ const guias = [
             "Ficha técnica do conjunto pretendido",
             "Resposta sobre aplicação e procedimento"
           ],
-          "valor": "Faixa a validar — solicitar orçamento; não é taxa oficial"
+          "valor": "A validar — solicitar orçamento"
         },
         {
           "numero": 3,
@@ -318,7 +318,7 @@ const guias = [
             "Registro de regulagem e serviço",
             "Orientação documental específica para iluminação"
           ],
-          "valor": "Faixa a validar — solicitar orçamento; não é taxa oficial"
+          "valor": "A validar — solicitar orçamento"
         }
       ]
     },
@@ -363,7 +363,7 @@ const guias = [
             "Desenho de posição dos acessórios",
             "Dimensões e instruções do fabricante"
           ],
-          "valor": "Faixa a validar — solicitar orçamento; não é taxa oficial"
+          "valor": "A validar — solicitar orçamento"
         },
         {
           "numero": 2,
@@ -373,7 +373,7 @@ const guias = [
             "Fotos dos locais de instalação",
             "Descrição das interferências e fixações"
           ],
-          "valor": "Faixa a validar — solicitar orçamento; não é taxa oficial"
+          "valor": "A validar — solicitar orçamento"
         },
         {
           "numero": 3,
@@ -383,7 +383,7 @@ const guias = [
             "Comprovantes de instalação a consultar",
             "Documentação de inspeção exigida para o escopo"
           ],
-          "valor": "Faixa a validar — solicitar orçamento; não é taxa oficial"
+          "valor": "A validar — solicitar orçamento"
         }
       ]
     },
@@ -429,7 +429,7 @@ const guias = [
             "Comprovantes de peças e instalação",
             "Autorização prévia, quando exigida"
           ],
-          "valor": "Faixa a validar — solicitar orçamento; não é taxa oficial"
+          "valor": "A validar — solicitar orçamento"
         },
         {
           "numero": 2,
@@ -439,7 +439,7 @@ const guias = [
             "Resultado da inspeção do conjunto turbo",
             "Identificação do veículo para o certificado"
           ],
-          "valor": "Faixa a validar — solicitar orçamento; não é taxa oficial"
+          "valor": "A validar — solicitar orçamento"
         },
         {
           "numero": 3,
@@ -449,7 +449,7 @@ const guias = [
             "CSV, quando exigido",
             "Documento do veículo e comprovantes solicitados pelo órgão"
           ],
-          "valor": "Faixa a validar — solicitar orçamento; não é taxa oficial"
+          "valor": "A validar — solicitar orçamento"
         }
       ]
     },
@@ -494,7 +494,7 @@ const guias = [
             "Diagrama do circuito pneumático",
             "Especificação de bolsas, compressor e reservatório"
           ],
-          "valor": "Faixa a validar — solicitar orçamento; não é taxa oficial"
+          "valor": "A validar — solicitar orçamento"
         },
         {
           "numero": 2,
@@ -504,7 +504,7 @@ const guias = [
             "Plano de fixação e passagem das linhas",
             "Comprovantes do kit e instalação a consultar"
           ],
-          "valor": "Faixa a validar — solicitar orçamento; não é taxa oficial"
+          "valor": "A validar — solicitar orçamento"
         },
         {
           "numero": 3,
@@ -514,7 +514,7 @@ const guias = [
             "Resultado de inspeção e CSV, se exigidos",
             "Manual de operação e manutenção do sistema"
           ],
-          "valor": "Faixa a validar — solicitar orçamento; não é taxa oficial"
+          "valor": "A validar — solicitar orçamento"
         }
       ]
     },
@@ -559,7 +559,7 @@ const guias = [
             "Diagrama do escapamento original",
             "Ficha do conjunto proposto"
           ],
-          "valor": "Faixa a validar — solicitar orçamento; não é taxa oficial"
+          "valor": "A validar — solicitar orçamento"
         },
         {
           "numero": 2,
@@ -569,7 +569,7 @@ const guias = [
             "Especificações de abafadores e controle de emissões",
             "Resposta técnica sobre ensaios aplicáveis"
           ],
-          "valor": "Faixa a validar — solicitar orçamento; não é taxa oficial"
+          "valor": "A validar — solicitar orçamento"
         },
         {
           "numero": 3,
@@ -579,7 +579,7 @@ const guias = [
             "Comprovante de instalação a consultar",
             "Resultados de avaliações exigidas para o sistema"
           ],
-          "valor": "Faixa a validar — solicitar orçamento; não é taxa oficial"
+          "valor": "A validar — solicitar orçamento"
         }
       ]
     },
@@ -624,7 +624,7 @@ const guias = [
             "Identificação do módulo e versão original",
             "Descrição do combustível e dos componentes atuais"
           ],
-          "valor": "Faixa a validar — solicitar orçamento; não é taxa oficial"
+          "valor": "A validar — solicitar orçamento"
         },
         {
           "numero": 2,
@@ -634,7 +634,7 @@ const guias = [
             "Proposta de calibração e parâmetros afetados",
             "Plano de avaliação de funcionamento e emissões"
           ],
-          "valor": "Faixa a validar — solicitar orçamento; não é taxa oficial"
+          "valor": "A validar — solicitar orçamento"
         },
         {
           "numero": 3,
@@ -644,7 +644,7 @@ const guias = [
             "Relatório técnico da intervenção, se realizada",
             "Orientação sobre registro da alteração de características"
           ],
-          "valor": "Faixa a validar — solicitar orçamento; não é taxa oficial"
+          "valor": "A validar — solicitar orçamento"
         }
       ]
     },
@@ -689,7 +689,7 @@ const guias = [
             "Identificação de discos, pinças e comandos originais",
             "Especificação do kit e aplicação pretendida"
           ],
-          "valor": "Faixa a validar — solicitar orçamento; não é taxa oficial"
+          "valor": "A validar — solicitar orçamento"
         },
         {
           "numero": 2,
@@ -699,7 +699,7 @@ const guias = [
             "Estudo de compatibilidade entre eixos e ABS",
             "Orientação sobre procedimento e ensaios de frenagem"
           ],
-          "valor": "Faixa a validar — solicitar orçamento; não é taxa oficial"
+          "valor": "A validar — solicitar orçamento"
         },
         {
           "numero": 3,
@@ -709,7 +709,7 @@ const guias = [
             "Relatório de instalação e avaliação do conjunto",
             "Plano de manutenção e documentos solicitados pelo órgão"
           ],
-          "valor": "Faixa a validar — solicitar orçamento; não é taxa oficial"
+          "valor": "A validar — solicitar orçamento"
         }
       ]
     },
