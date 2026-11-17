@@ -38,7 +38,7 @@ Avaliações completas são relatos fictícios, sem opção de publicar. WhatsAp
 1. **Legalidade:** todos os selos e roteiros são editoriais e a validar. O detalhe explica o escopo de cada selo. “Permitida” em Rodas e pneus refere-se à hipótese de reposição equivalente, não a qualquer alteração. Confirmar admissibilidade, veículo/categoria, autorização prévia, documentos, inspeção/CSV e sequência no órgão competente.
 2. **Normas:** referência 916/2022 mantida conforme pedido. TODO em dados.js pede conferir a divergência 953/2022 do Figma, alterações posteriores e normas específicas de iluminação, ruído, emissões etc. Localizar a referência oficial não equivale a validar os guias.
 3. **Datas:** dataConsulta e dataAtualizacao permanecem “a validar”; edição do código não é revisão jurídica.
-4. **Custos:** faixas de projeto são exemplos fictícios, identificados assim em cards e detalhes. Não são cotações. Valores das etapas permanecem a validar; não foram inventadas taxas oficiais. Confirmar se inspeção e CSV têm cobrança conjunta antes de apresentar estimativas.
+4. **Custos:** faixas de projeto são exemplos fictícios, identificados assim em cards e detalhes. Não são cotações. As 33 etapas agora têm faixas fictícias de exemplo e valorExemplo: true, com aviso visível de que não são taxas oficiais, cotações ou cobranças obrigatórias. Uma etapa pode não ter cobrança própria. Não somar faixas: inspeção e emissão de CSV podem estar no mesmo serviço. Todos os valores continuam a validar.
 5. **Oficinas:** validar identidade, endereço, serviços, horários, contato e autorização de publicação antes de substituir os exemplos por empresas reais. Notas, relatos e distâncias precisam de origem verificável.
 6. **Fase 2:** para uso real ainda seriam necessários backend, autenticação, proteção de dados, moderação e fluxos reais de cadastro/avaliação. Nada disso está simulado como funcional.
 
@@ -56,6 +56,9 @@ O SQL foi somente lido. Objetos aninhados são uma forma de apresentação; uma 
 | legalizacao dentro do guia | legalizacao.fk_guia | id_legalizacao será gerado pelo banco. O SQL permite múltiplas legalizações por guia. |
 | legalizacao.etapas[] | etapas.fk_legalizacao | id_etapa não existe no objeto local; numero não substitui a PK. |
 | etapa.numero / titulo / descricao / valor | etapas.numero / titulo / descricao / valor | Direto; observar VARCHAR(50) de valor ao preparar a API. |
+| etapa.valorExemplo | Sem coluna em etapas | Boolean editorial que identifica a faixa fictícia. Não persistir em valor nem interpretar como condição legal. |
+| perguntasParaOficina[] / errosComuns[] | Sem colunas em guia | Listas editoriais específicas de cada tema; modelar separadamente antes de integração. |
+| oficinas[].diferenciais[] / prazoMedioExemplo | Sem colunas em oficina | Lista de características e texto de prazo fictícios; não são avaliações verificadas nem disponibilidade real. |
 | etapa.documentosNecessarios[] | etapas.documentos_necessarios | Array → TEXT: definir serialização (ex.: JSON) ou normalização futura. |
 | fonte.nome / orgao / referencia | fonte.nome / orgao / referencia | Direto; referencia contém URL. id_fonte virá do banco. |
 | fonte.dataConsulta | fonte.data_consulta | “a validar” → NULL. |
@@ -71,8 +74,8 @@ O SQL foi somente lido. Objetos aninhados são uma forma de apresentação; uma 
 
 ### Campos sem coluna direta
 
-- **Guias:** situacaoLegal, oQueE, beneficios[], pontosAtencao[], enquadramento, statusConteudo, custoObservacao, art e color. Não sobrecarregar descricao silenciosamente para guardar esses campos.
-- **Oficinas:** bairro, cidade, uf, especialidade, distanciaKm e ficticia. usuario.cidade NÃO representa a cidade da oficina. Especialidade principal não está definida pelo esquema de serviços.
+- **Guias:** situacaoLegal, oQueE, beneficios[], pontosAtencao[], perguntasParaOficina[], errosComuns[], enquadramento, statusConteudo, custoObservacao, art e color. Não sobrecarregar descricao silenciosamente para guardar esses campos.
+- **Oficinas:** bairro, cidade, uf, especialidade, distanciaKm, diferenciais[], prazoMedioExemplo e ficticia. usuario.cidade NÃO representa a cidade da oficina. Especialidade principal não está definida pelo esquema de serviços.
 - **Avaliações:** autor como nome de exibição e ficticia. Falta vínculo a um entusiasta real.
 - **Favoritos/checklists/filtros:** não há tabelas equivalentes. acessa registra consultas, não favoritos ou checklist.
 
@@ -84,14 +87,24 @@ O SQL foi somente lido. Objetos aninhados são uma forma de apresentação; uma 
 - avaliacao.fk_entusiasta é obrigatório; não se pode inserir os relatos fictícios sem resolver essa relação.
 - dono_oficina.nome_responsavel e usuario.nome/email têm relação conceitual com os controles do formulário. Nenhum valor é persistido. usuario.senha não tem campo correspondente nesta demonstração.
 
+## Ampliação editorial
+
+Os 11 guias têm quatro frases em “O que é”, quatro benefícios, cinco pontos de atenção, cinco perguntas (seis em Motor Turbo), três erros comuns e três etapas com ações concretas. Motor Turbo mantém Laudo/Inspeção, CSV e DETRAN. IDs, rotas, selos, fonte, datas “a validar”, paleta e estrutura foram preservados; não foram acrescentados números de normas.
+
+Cada uma das 33 etapas tem valorExemplo: true e uma faixa com “(exemplo)”, dentro do limite VARCHAR(50). O detalhe exibe tanto um aviso geral quanto um aviso junto de cada valor. As faixas foram inventadas somente para demonstrar a interface; não resultam de pesquisa de preços, não são taxas reais e não devem orientar orçamento de contratação.
+
+As oito oficinas têm três diferenciais fictícios, um prazo médio de exemplo e de três a cinco avaliações próprias, totalizando 31 relatos distintos. Notas, IDs e quantidades foram preservados. Prazos não indicam agenda ou promessa de entrega; diferenciais não são fatos verificados. Não há contato real.
+
 ## Verificação
 
 - node --check em app.js e dados.js.
-- 91 verificações funcionais em Chrome headless: 11 páginas de guias, checklists, busca sem acento, selos, favoritos, oito perfis, filtros combinados, ordenações, avaliações completas, rotas inválidas, formulário de usuário e cinco etapas da oficina, CNPJ/CEP/e-mail, arquivo inválido e descarte de dados.
-- Em viewport efetivo de 390 px: 127 verificações, incluindo o fluxo funcional e checagem de transbordamento em cada rota visitada. O teste usa iframe isolado porque Chrome headless impõe largura mínima de janela de 500 px.
-- Nova carga: favorito e checklist preservados; cadastro vazio (três verificações adicionais).
-- Capturas de guia, perfil e cadastro revisadas. Testes usam perfil temporário isolado, sem tocar no navegador pessoal.
-- Não foi validada a legalidade dos roteiros nem dados de empresas reais; não existem nesse catálogo.
+- Verificação da estrutura editorial dos 11 guias: contagem de frases, benefícios, pontos de atenção, perguntas, erros comuns e etapas; manutenção de datas e status de validação; todos os valores de exemplo sinalizados e dentro do limite de 50 caracteres.
+- 31 avaliações distintas, entre três e cinco por oficina; diferenciais e prazos preenchidos e perfis ainda fictícios.
+- 176 verificações funcionais aprovadas em desktop e mais 176 em viewport efetivo de 390 px. Incluem todas as páginas, novos campos visíveis, avisos de preço, checklists, filtros, ordenações, avaliações, cadastro e checagem de transbordamento por rota.
+- Cinco verificações adicionais em nova carga: favoritos e checklist preservados, cadastro vazio e layout das rotas visitadas.
+- Capturas atualizadas de perfil e guia móvel revisadas. Os testes usam um perfil temporário isolado do Chrome. Em 390 px, um iframe de teste controla a largura porque a janela headless limita sua largura mínima.
+- As alterações desta ampliação atingem apenas dados.js, app.js e este documento; CSS e arquivos visuais não precisaram mudar.
+- Não foi validada a legalidade dos roteiros nem a realidade de preços, prazos ou empresas. O banco não foi alterado.
 
 ## Referências
 

@@ -123,12 +123,15 @@ function renderGuide(id) {
         <section><h2>O que é</h2><p>${escapeHTML(guide.oQueE)}</p></section>
         <section><h2>Benefícios</h2>${listHTML(guide.beneficios)}</section>
         <section><h2>Pontos de atenção</h2>${listHTML(guide.pontosAtencao)}</section>
+        <section data-guide-questions><h2>Perguntas para a oficina</h2>${listHTML(guide.perguntasParaOficina)}</section>
+        <section data-guide-mistakes><h2>Erros comuns</h2>${listHTML(guide.errosComuns)}</section>
       </div><aside class="about-panel"><h2>Planeje o projeto</h2><p class="cost"><strong>${escapeHTML(guide.custoEstimado)}</strong><small>${escapeHTML(guide.custoObservacao)}</small></p>
         <div class="actions"><button class="button" data-legalize>Ver como legalizar</button><button class="button light dialog-save" data-save="${guide.id}">Salvar guia</button></div>
       </aside></div>
       <section class="reading legal-section" id="legalizacao" tabindex="-1"><h2>Etapas do processo</h2>
         <p>Roteiro de consulta, não instrução oficial. Etapas e documentos: a validar. Confirme autorização prévia, ordem e exigências para o seu caso. Valores não são taxas oficiais.</p>
-        <ol class="legal-steps">${guide.legalizacao.etapas.map(step => `<li><h3>${step.numero}. ${escapeHTML(step.titulo)}</h3><p>${escapeHTML(step.descricao)}</p><h4>Documentos para separar ou confirmar</h4>${listHTML(step.documentosNecessarios)}<p><strong>Valor estimado:</strong> ${escapeHTML(step.valor)}</p></li>`).join('')}</ol>
+        <div class="notice"><strong>Valores fictícios de exemplo</strong><p>As faixas abaixo não são taxas oficiais, cotações ou cobranças obrigatórias. Servem apenas para demonstrar a interface; uma etapa pode não ter cobrança própria. Não some os valores para estimar o custo real: serviços podem estar incluídos em outros.</p></div>
+        <ol class="legal-steps">${guide.legalizacao.etapas.map(step => `<li><h3>${step.numero}. ${escapeHTML(step.titulo)}</h3><p>${escapeHTML(step.descricao)}</p><h4>Documentos para separar ou confirmar</h4>${listHTML(step.documentosNecessarios)}<p><strong>${step.valorExemplo ? 'Faixa fictícia:' : 'Valor estimado:'}</strong> ${escapeHTML(step.valor)}</p>${step.valorExemplo ? '<p class="help" data-example-price>Exemplo a validar — não é taxa oficial nem cobrança obrigatória.</p>' : ''}</li>`).join('')}</ol>
         <p>Verificação do roteiro: ${escapeHTML(guide.legalizacao.dataAtualizacao)}</p>
       </section>
       <section class="source-card reading"><h2>Fonte oficial</h2><p><strong>${escapeHTML(guide.fonte.orgao)}</strong> · ${escapeHTML(guide.fonte.nome)}</p>
@@ -238,8 +241,9 @@ function renderWorkshop(id, allReviews = false) {
     <div class="page-content"><div class="notice"><strong>Perfil fictício · Demonstração</strong><p>Este estabelecimento não existe no diretório real. Endereço, horários, serviços, distância, notas e relatos abaixo são exemplos. Não há contratação ou contato.</p></div>
       <a class="text-link" href="#oficinas">Voltar à busca</a><p class="detail-meta"><strong>${ratingText(w)}</strong><span>${w.distanciaKm.toLocaleString('pt-BR')} km · distância simulada</span></p>
       <div class="detail-grid"><div class="reading"><h2>Sobre a oficina de exemplo</h2><p>${escapeHTML(w.descricao)}</p><h2>Serviços oferecidos</h2><div class="chips">${w.servicos.map(value=>`<span class="tag">${escapeHTML(value)}</span>`).join('')}</div>
+        <section data-workshop-differentials><h2>Diferenciais de exemplo</h2><p>Características fictícias deste perfil, sem verificação de um estabelecimento real.</p>${listHTML(w.diferenciais)}</section>
         <h2>Endereço fictício</h2><address>${escapeHTML(w.logradouro)}, ${w.numero}<br>${escapeHTML(w.bairro)} · ${escapeHTML(w.cidade)} / ${w.uf}<br>CEP ${w.cep} (exemplo, não utilizar para deslocamento)</address>
-      </div><aside class="about-panel"><h2>Horário de exemplo</h2><p>${escapeHTML(w.horarios)}</p><button class="button dark" disabled aria-describedby="contact-unavailable">WhatsApp</button><p id="contact-unavailable" class="help">Contato indisponível: perfil de exemplo</p></aside></div>
+      </div><aside class="about-panel"><h2>Horário de exemplo</h2><p>${escapeHTML(w.horarios)}</p><h2>Prazo médio de exemplo</h2><p data-workshop-deadline><strong>${escapeHTML(w.prazoMedioExemplo)}</strong></p><p class="help">Prazo fictício para demonstração, sem disponibilidade ou promessa de entrega. Uma oficina real deverá avaliar escopo, peças e agenda.</p><button class="button dark" disabled aria-describedby="contact-unavailable">WhatsApp</button><p id="contact-unavailable" class="help">Contato indisponível: perfil de exemplo</p></aside></div>
       <section class="reading"><h2>Avaliações de exemplo</h2><p>Relatos inventados para demonstrar a interface. Não representam clientes reais.</p>${w.avaliacoes.slice(0,3).map(reviewCard).join('')}<a class="button light" href="#oficina/${w.id}/avaliacoes">Ver todas as avaliações · demonstração</a></section>
     </div></article>`;
   document.title = `${w.nomeFantasia} (exemplo) | Garagem`;
