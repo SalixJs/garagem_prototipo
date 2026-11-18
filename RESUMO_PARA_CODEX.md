@@ -1,5 +1,12 @@
 # Continuidade do Garagem em outro computador
 
+## Atualização Java em 18/11/2026
+
+Fontes sincronizados de `IdeaProjects/Garagem/src`, sem alterar o projeto de origem. Agora há `Main` vazio, `UserDAO.insert` e `EnthusiastDAO.insert` com commit/rollback. O construtor de `Enthusiast` foi corrigido na origem para `(code, name, email, passwordHash, city)`. A conexão padrão aponta para `garagem2`, mantendo credenciais em variáveis de ambiente.
+
+Compilação com JDK 25.0.4 e teste do mapeamento de e-mail/hash aprovados. Não houve execução dos DAOs nem alteração de banco. Pendências: `enthusiast(code)` diverge de `id_enthusiast` no rascunho; `int` no modelo não cobre toda a faixa de `BIGINT UNSIGNED`; a ausência de chave gerada não lança erro explícito no `EnthusiastDAO`, e o objeto recebe o ID antes do commit. O código foi publicado como está na origem, sem correções adicionais. As descrições abaixo de DAO vazio, ausência de Main e construtor trocado são históricas e foram superadas por esta atualização.
+
+
 SQL revisado em 17/11/2026; demais observacoes historicas de 12/11/2026. Leia este arquivo antes de propor mudancas.
 
 ## Objetivo e modo de trabalho

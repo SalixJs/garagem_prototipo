@@ -12,3 +12,12 @@ Coleta realizada em 12/11/2026. Preparação para publicação em 13/11/2026.
 - O manifesto registra o SHA-256 de cada arquivo do pacote, exceto o próprio manifesto e metadados Git. `.gitattributes` preserva os bytes para permitir a conferência em outro sistema.
 
 Compilação não significa que todas as regras funcionem: os problemas de lógica encontrados estão em `RESUMO_PARA_CODEX.md`. Não foram executados os programas Java que modificam dados, nem restaurados os dumps sobre os bancos originais. O banco da clínica não está incluído.
+
+## Atualização Java em 18/11/2026
+
+- Fontes de Garagem sincronizados com o projeto IntelliJ local.
+- Compilação de todos os fontes Garagem com JDK 25.0.4 aprovada.
+- Teste isolado confirma os campos e-mail e hash no construtor de Enthusiast.
+- Credenciais continuam em variáveis de ambiente, sem senha literal.
+- DAOs não foram executados; a divergência `enthusiast.code` / `id_enthusiast` permanece documentada.
+- Manifesto recalculado para o estado atual dos arquivos, incluindo as atualizações remotas incorporadas antes desta publicação.

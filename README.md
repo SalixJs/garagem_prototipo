@@ -46,13 +46,13 @@ Configure no ambiente de execução do IntelliJ:
 
 | Variável | Garagem | Clínica |
 |---|---|---|
-| `DB_URL` | `jdbc:mysql://localhost:3306/garagem` | `jdbc:mysql://localhost:3306/clinica_veterinaria` |
+| `DB_URL` | `jdbc:mysql://localhost:3306/garagem2` | `jdbc:mysql://localhost:3306/clinica_veterinaria` |
 | `DB_USER` | Usuário MySQL do computador de destino | Usuário MySQL do computador de destino |
 | `DB_PASSWORD` | Senha local, não versionada | Senha local, não versionada |
 
 Não basta criar um arquivo `.env`: estes projetos leem variáveis de ambiente com `System.getenv`.
 
-O Garagem ainda não possui classe `main`, DAO implementado ou interface Java. A clínica possui `Main` (Swing) e `Main2` (exercício que altera registros); **o banco `clinica_veterinaria` não faz parte deste pacote**, pois foram solicitados apenas `garagem` e `garagem2`.
+Atualização Java de 18/11/2026: o Garagem possui `Main` vazio, `UserDAO.insert` e `EnthusiastDAO.insert` com transação. O construtor de `Enthusiast` agora recebe e-mail antes do hash. Ainda não há interface Java ou autenticação. O DAO usa `enthusiast(code)`, enquanto o rascunho SQL define `id_enthusiast`: é necessário alinhar essa coluna antes de executar o cadastro. Os IDs no modelo Java continuam `int`, enquanto o rascunho usa `BIGINT UNSIGNED`. A clínica possui `Main` (Swing) e `Main2` (exercício que altera registros); **o banco `clinica_veterinaria` não faz parte deste pacote**, pois foram solicitados apenas `garagem` e `garagem2`.
 
 ## Origem
 
