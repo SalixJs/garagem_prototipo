@@ -1,6 +1,6 @@
 # Continuidade do Garagem em outro computador
 
-Estado observado em 12/11/2026. Leia este arquivo antes de propor mudanças.
+SQL revisado em 17/11/2026; demais observacoes historicas de 12/11/2026. Leia este arquivo antes de propor mudancas.
 
 ## Objetivo e modo de trabalho
 
@@ -12,7 +12,7 @@ O produto Garagem é um guia/diretório para entusiastas de modificações autom
 
 - `bancos/garagem.sql`: dump real do MySQL 8.0.46 local, com 15 tabelas e zero registros. Este é o esquema efetivamente criado.
 - `bancos/garagem2.sql`: dump real de um segundo banco criado, ainda sem tabelas. Não dizer que a nova modelagem já foi aplicada.
-- `bancos/garagem2-rascunho-nao-executado.sql`: conteúdo salvo da aba SQL aberta no Workbench. Contém `users`, `enthusiast` e `preferences` em construção. Foi preservado sem executar nem corrigir o rascunho.
+- `bancos/garagem2-rascunho-nao-executado.sql`: conteúdo salvo da aba SQL aberta no Workbench. Agora contem as 15 tabelas do diagrama em ingles, incluindo vistos recentemente em `accesses`. IDs/FKs padronizados em BIGINT UNSIGNED, perfis com PK compartilhada, hash obrigatorio, CHECKs e regras de exclusao. Salvo do Workbench sem executar. Nao e um dump nem uma migracao aplicada.
 - `java/Garagem`: classes `Model.User`, `Model.Enthusiast`, `Model.OwnerAutoRepairShop`, `Util.ConnectionFactory` e `DAO.EnthusiastDAO` (vazio). Não há ponto de entrada `main`, CRUD, autenticação ou geração de hash implementados.
 - `java/clinicaVeterinaria2`: exemplo de herança `Employee` → `VeterinaryMedic`/`Secretary`, DAOs JDBC, interface Swing e controlador. Seu banco de referência se chama `clinica_veterinaria` e não foi exportado neste pacote.
 - `site/garagem`: frontend estático responsivo, com navegação por hash, busca e filtros, guias de consulta, favoritos e checklist em localStorage. Catálogo de oficinas vazio por padrão, com opção de exemplos fictícios. Não está ligado aos bancos nem ao Java.
@@ -32,10 +32,6 @@ O produto Garagem é um guia/diretório para entusiastas de modificações autom
 ## Problemas observados para retomar com o usuário
 
 - Em `Enthusiast.java`, a assinatura usa `(code, name, passwordHash, email, city)` e chama `super` nessa ordem. `User` espera `(code, name, email, passwordHash, city)`. Os dois campos String podem ficar trocados; a compilação não detecta isso. Foi documentado, não corrigido nesta transferência.
-- No rascunho de `garagem2`, `users.id_user` é `INT`, mas as FKs são `BIGINT UNSIGNED`: incompatibilidade.
-- O rascunho usa `AUTO_INCREMENT` em `enthusiast.id_enthusiast`, apesar da intenção de PK compartilhada. Rever isso com o modelo explicado.
-- `preferences` referencia `user(id_user)` (singular), mas a tabela declarada é `users` (plural). Falta também terminar o último comando com ponto e vírgula para uso em script.
-- `password_hash` no rascunho é `VARCHAR(225)` e permite NULL; a proposta do chat era `VARCHAR(255) NOT NULL`. Validar a decisão, sem fingir que um nome de coluna produz hash.
 - Os DAOs da clínica são material de estudo: métodos de inserção não fecham a conexão nem fazem rollback no catch; há risco de a interface anunciar sucesso apesar de o DAO engolir erros. Não copiar esses problemas para o Garagem.
 - `Main2` usa `list.get(0)` sem verificar lista vazia e executa atualizações. Não rodar como teste inocente de conexão.
 
@@ -57,3 +53,14 @@ Na cópia para o GitHub, os dois `ConnectionFactory.java` passaram a ler `DB_USE
 ## Pedido pronto para o outro Codex
 
 > Leia README.md, RESUMO_PARA_CODEX.md e docs/chat-relacoes-mysql.md deste repositório. Confira os dois dumps, o rascunho do Workbench, os diagramas e os projetos Java. Quero continuar aprendendo a relação usuario/entusiasta e o cadastro usando JDBC/DAO como no clinicaVeterinaria2. Distinga o que está implementado do que só foi discutido. Não recrie bancos existentes nem execute o rascunho sem antes explicar os ajustes. Comece conferindo a ordem dos argumentos de Enthusiast e o plano do DAO.
+
+## Atualizacao SQL em 17/11/2026
+
+- O usuario autorizou escrever e publicar o rascunho completo; nao autorizou executar SQL.
+- As 15 tabelas cobrem contas, perfis, preferencias, guias, acessos, oficinas, servicos, fotos, avaliacoes, regularizacao, etapas e fontes.
+- `accesses` guarda a ultima visita por par usuario/guia. Exemplos JDBC de registrar, listar e limpar historico ficam comentados.
+- Um usuario pode ser entusiasta e dono. Uma avaliacao por entusiasta/oficina. Donos com oficinas nao podem ser excluidos antes de resolver os vinculos (RESTRICT).
+- Hash, autorizacao por usuario, validacao de entradas, retencao e remocao dos arquivos de fotos dependem do backend. O schema nao comprova conformidade LGPD.
+- Produto planejado para uso real, inicialmente sob responsabilidade de pessoa fisica, com proposta de cadastro apenas de adultos; mecanismo de verificacao ainda nao definido.
+- Os dumps garagem.sql e garagem2.sql continuam sendo registros historicos e nao foram regenerados. Nenhum comando foi executado no MySQL nesta atualizacao.
+- Verificacao desta alteracao: revisao estatica do SQL e diff; sem teste de execucao no banco por instrucao do usuario.
