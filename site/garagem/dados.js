@@ -1614,4 +1614,11 @@ Sem avaliações: exibir “Ainda sem avaliações”. Nota e total serão deriv
 nunca preencher com uma nota estimada. O selo depende de origem e verificadoEm.
 */
 
-window.GaragemDados = { guias, oficinas };
+// Cada foto preenchida abre o guia indicado. As duas reservas ficam fora da página até receberem imagem.
+const fotosDaCapa = [
+  { arquivo: 'picape-prata.webp', guia: 'suspensao', descricao: 'Picape prata rebaixada, vista de frente e de lado.' },
+  { arquivo: 'motor-turbo.jpg', guia: 'turbo', descricao: 'Detalhe da turbina, da tubulação e das conexões azuis no cofre do motor.' },
+  { arquivo: '', guia: '', descricao: '' },
+  { arquivo: '', guia: '', descricao: '' }
+];
+window.GaragemDados = { guias, oficinas, fotosDaCapa };

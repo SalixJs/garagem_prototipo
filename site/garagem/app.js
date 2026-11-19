@@ -156,15 +156,67 @@ function renderNotFound(type) {
   main.innerHTML = `<div class="container section empty"><h1>${type} não encontrado</h1><p>O endereço não corresponde ao catálogo atual.</p><a class="button" href="#inicio">Ir ao início</a></div>`;
 }
 const mapArt=`<div class="map-art" role="img" aria-label="Ilustração de mapa"><svg viewBox="0 0 500 320" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="500" height="320" fill="#dce5eb"/><path d="M0 80 500 250M50 0 200 320M280 0 390 320M0 270 500 70" stroke="#f9fbfd" stroke-width="23"/><path d="M0 80 500 250M50 0 200 320M280 0 390 320M0 270 500 70" stroke="#c5d2dd" stroke-width="2"/><path d="M420 0C300 100 520 200 440 320" fill="none" stroke="#b5ccdf" stroke-width="30"/><path d="m35 130 65 22 21 63-64-22Z" fill="#bdd2c9"/><path d="m205 35 48 14 19 53-46-17Z" fill="#bdd2c9"/><g fill="#f0804b" stroke="white" stroke-width="4"><circle cx="130" cy="70" r="10"/><circle cx="370" cy="230" r="10"/><circle cx="230" cy="260" r="8"/></g></svg><div class="map-badge">${icon('pin')}<div><strong>O próximo passo é por perto.</strong><small>Explore serviços e especialidades</small></div></div></div>`;
+const portraitFilm = matchMedia('(orientation: portrait)');
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+let filmPaused = false;
+
+function setupFilm() {
+  const video = document.querySelector('#opening-film');
+  if (!video) return;
+  const control = document.querySelector('#film-control');
+  const label = control.querySelector('span');
+  function updateControl() {
+    label.textContent = video.paused ? 'Reproduzir vídeo' : 'Pausar vídeo';
+    control.dataset.playing = String(!video.paused);
+  }
+  function play() {
+    const file = 'assets/abertura-' + (portraitFilm.matches ? 'mobile' : 'desktop') + '.mp4';
+    if (video.getAttribute('src') !== file) video.src = file;
+    video.muted = true;
+    video.play().catch(() => { if (video.isConnected) updateControl(); });
+  }
+  video.onplaying = () => { video.classList.add('is-playing'); updateControl(); };
+  video.onpause = updateControl;
+  video.onerror = () => { video.classList.remove('is-playing'); control.hidden = true; };
+  control.onclick = () => {
+    if (video.paused) { filmPaused = false; play(); }
+    else { filmPaused = true; video.pause(); }
+  };
+  if (!filmPaused && !reducedMotion.matches && !navigator.connection?.saveData) play();
+  else { video.pause(); updateControl(); }
+}
+portraitFilm.addEventListener('change', () => {
+  document.querySelector('#opening-film')?.classList.remove('is-playing');
+  setupFilm();
+});
+reducedMotion.addEventListener('change', () => {
+  if (reducedMotion.matches) document.querySelector('#opening-film')?.classList.remove('is-playing');
+  setupFilm();
+});
+
+function featuredPhotos() {
+  return window.GaragemDados.fotosDaCapa.map(photo => {
+    const guide = guides.find(item => item.id === photo.guia);
+    if (!photo.arquivo || !guide) return '';
+    return `<a class="project-photo" href="#guia/${guide.id}">
+      <img loading="lazy" decoding="async" src="assets/${escapeHTML(photo.arquivo)}" alt="${escapeHTML(photo.descricao)}">
+      <span class="photo-title">${escapeHTML(guide.titulo)} ${icon('arrow')}</span>
+    </a>`;
+  }).join('');
+}
 function renderHome() {
   main.innerHTML = `<section class="hero" aria-labelledby="home-title">
-    <img class="hero-image" src="assets/porsche.jpg" alt="Porsche escuro em uma estrada" fetchpriority="high">
+    <picture aria-hidden="true"><source media="(orientation: portrait)" srcset="assets/abertura-mobile.jpg">
+      <img class="hero-image" src="assets/abertura-desktop.jpg" alt="" fetchpriority="high"></picture>
+    <video id="opening-film" muted playsinline loop preload="none" disablepictureinpicture aria-hidden="true"></video>
     <div class="container"><div class="hero-copy">
-      <h1 id="home-title">Seu carro.<br>Seu projeto.</h1>
-      <p>Explore guias de modificação, confira o que precisa validar e encontre oficinas por especialidade.</p>
+      <h1 id="home-title">Seu carro. Seu projeto.</h1>
+      <p>Guias de modificação e oficinas por especialidade.</p>
       <div class="actions"><a class="button" href="#guias">Explorar guias ${icon('arrow')}</a><a class="button secondary" href="#oficinas">Encontrar oficinas</a></div>
-    </div></div>
-  </section><section class="benefits" aria-label="Sobre o Garagem"><div class="container"><div class="benefit">${icon('book')}<div><strong>Comece com informação</strong><small>Roteiros para planejar sua modificação</small></div></div><div class="benefit">${icon('pin')}<div><strong>Encontre sua especialidade</strong><small>Busca por região e tipo de serviço</small></div></div><div class="benefit">${icon('shield')}<div><strong>Consulte a fonte</strong><small>Referências oficiais para ir além</small></div></div></div></section><section class="container section"><div class="section-heading"><div><h2>Qual é o seu próximo projeto?</h2><p>Escolha uma modificação e descubra por onde começar.</p></div><a class="text-link" href="#guias">Ver todos os guias ${icon('arrow')}</a></div><div class="guide-grid">${guides.slice(0,3).map(guideCard).join('')}</div></section><section class="container section" style="padding-top:0"><div class="workshop-banner"><div class="banner-copy"><h2>Um bom projeto precisa da oficina certa.</h2><p>Encontre especialidades e compare serviços. O diretório está em formação; conheça a experiência com perfis de exemplo.</p><a href="#oficinas" class="button">Explorar oficinas ${icon('arrow')}</a></div>${mapArt}</div><div class="how"><h2>Da ideia ao próximo passo.</h2><div class="how-grid"><div class="step"><span class="step-number">01</span><div><h3>Escolha a modificação</h3><p>Encontre o tema do seu projeto e organize suas dúvidas.</p></div></div><div class="step"><span class="step-number">02</span><div><h3>Confira as exigências</h3><p>Use as fontes oficiais e confirme o procedimento no seu estado.</p></div></div><div class="step"><span class="step-number">03</span><div><h3>Converse com uma oficina</h3><p>Procure a especialidade certa antes de decidir o próximo passo.</p></div></div></div></div></section>`;}
+    </div><button type="button" id="film-control" aria-controls="opening-film" data-playing="false"><span>Reproduzir vídeo</span></button></div>
+  </section><section class="benefits" aria-label="Sobre o Garagem"><div class="container"><div class="benefit">${icon('book')}<div><strong>Comece com informação</strong><small>Roteiros para planejar sua modificação</small></div></div><div class="benefit">${icon('pin')}<div><strong>Encontre sua especialidade</strong><small>Busca por região e tipo de serviço</small></div></div><div class="benefit">${icon('shield')}<div><strong>Consulte a fonte</strong><small>Referências oficiais para ir além</small></div></div></div></section><section class="container section"><div class="section-heading"><div><h2>Qual é o seu próximo projeto?</h2><p>Escolha uma modificação e descubra por onde começar.</p></div><a class="text-link" href="#guias">Ver todos os guias ${icon('arrow')}</a></div><div class="project-photos">${featuredPhotos()}</div></section><section class="container section" style="padding-top:0"><div class="workshop-banner"><div class="banner-copy"><h2>Um bom projeto precisa da oficina certa.</h2><p>Encontre especialidades e compare serviços. O diretório está em formação; conheça a experiência com perfis de exemplo.</p><a href="#oficinas" class="button">Explorar oficinas ${icon('arrow')}</a></div>${mapArt}</div><div class="how"><h2>Da ideia ao próximo passo.</h2><div class="how-grid"><div class="step"><span class="step-number">01</span><div><h3>Escolha a modificação</h3><p>Encontre o tema do seu projeto e organize suas dúvidas.</p></div></div><div class="step"><span class="step-number">02</span><div><h3>Confira as exigências</h3><p>Use as fontes oficiais e confirme o procedimento no seu estado.</p></div></div><div class="step"><span class="step-number">03</span><div><h3>Converse com uma oficina</h3><p>Procure a especialidade certa antes de decidir o próximo passo.</p></div></div></div></div></section>`;
+  setupFilm();
+}
 function pageHeader(title,desc){return `<div class="page-heading"><a class="breadcrumb" href="#inicio">Início <span aria-hidden="true">/</span></a><h1>${title}</h1><p>${desc}</p></div>`;}
 
 const specialties = ['Turbo','Motor','Suspensão','Freios','Áudio','Estética','Escapamento','Performance','Remap','Legalização'];
