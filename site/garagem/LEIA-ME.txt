@@ -1,54 +1,78 @@
 GARAGEM — SITE PARA XAMPP
+Atualizado em 18/11/2026.
 
+Copie esta pasta inteira para C:\xampp\htdocs\garagem e inicie o Apache.
 Acesso: http://localhost/garagem/
-No painel do XAMPP, inicie o Apache. MySQL não é necessário nesta versão.
+HTML, CSS e JavaScript puros; sem build, pacotes ou conexão MySQL.
+dados.js deve carregar antes de app.js. Fontes Google exigem internet,
+mas há alternativas locais. Arquivos de imagem ficam em assets/.
 
-Arquivos: index.html, style.css, dados.js, app.js e assets/.
-Não há instalação de pacotes nem compilação.
+MODO DEMONSTRAÇÃO: SEM SENHA REAL, SEM CONTA REAL
 
-Esta entrega é o site (frontend), conforme solicitado. Inclui navegação,
-busca e filtros de guias, favoritos, checklist local e busca demonstrativa
-de oficinas. Não inclui painel administrativo, autenticação ou integração
-com o esquema MySQL do repositório.
+Em #login, escolha Entusiasta ou Dono de oficina e use uma entrada rápida.
+Não há autenticação real. Não digite credenciais reais.
+A sessão local guarda somente tipo, nome fixo de exemplo e, para o dono,
+o ID da oficina de exemplo (Patrick Suspensões ou ACF Performance).
+Sair remove essa sessão. Recarregar mantém a sessão quando o navegador
+permite armazenamento. Login real exige backend, hash de senha e autorização
+no servidor; o backend Java/JDBC continua planejado, sem integração aqui.
 
-Os guias são roteiros de preparação para consulta, não pareceres técnicos
-ou jurídicos. Os perfis de oficinas são explicitamente fictícios, e ficam
-ocultos até que o visitante ative os exemplos. Não há contatos ou preços
-inventados apresentados como reais.
+Ambos os perfis têm Início, Oficinas, Guia e Perfil. A única aba adicional
+do dono é Minha oficina. Visitante continua acessando guias e oficinas.
+Minha oficina bloqueia visitante e entusiasta apenas na interface; qualquer
+pessoa pode modificar JavaScript/storage. Isso não protege dados reais.
 
-Favoritos e checklists usam localStorage. São específicos do navegador
-e da origem (endereço) onde o site é aberto.
+ARMAZENAMENTO LOCAL
+
+- garagem.saved: favoritos de guias.
+- garagem.checks: marcações de preparação, com chaves v2.
+- garagem.demo.session: tipo, nomeExibicao e oficinaId somente para dono.
+- garagem.demo.preferencias: cidade e especialidades de interesse.
+- garagem.demo.minhaOficina.9 ou .10: textos de exemplo, endereço de exemplo,
+  horários, serviços e status visual da respectiva oficina.
+
+Favoritos, checklists e preferências são compartilhados pelos perfis de
+exemplo neste navegador/origem. As duas oficinas têm edições separadas.
+Sair não apaga favoritos ou edições. Restaurar exemplo original remove a
+edição daquela oficina. Rascunho/Publicada é apenas visual, não publicação.
+
+A edição permite somente os campos explicitamente listados. Não guarda
+senha, e-mail, CNPJ, notas, origem, WhatsApp, arquivos ou metadados de arquivos.
+Use SOMENTE dados de exemplo. Há bloqueio de padrões comuns de documentos e
+e-mail em texto livre, mas ele não é um detector universal de dados pessoais.
+Logo e fotos mostram apenas nome/tipo/tamanho na tela, sem leitura, upload,
+persistência ou alteração da imagem pública.
+
+#cadastro continua descartando os dados digitados. Ao concluir oferece
+entrar com um perfil fixo de demonstração, sem reutilizar nome/e-mail/CNPJ.
+O dono escolhe qual das duas oficinas do protótipo deseja demonstrar.
+
+CATÁLOGO E ORIGENS
+
+11 guias editoriais a validar. Custos e valores são exemplos fictícios,
+não cotações ou taxas oficiais. Guias não substituem o órgão de trânsito.
+
+10 oficinas: oito fictícias e duas transcritas do protótipo fornecido:
+Patrick Suspensões (4,8 / 232) e ACF Performance (4,9 / 521).
+Essas notas/totais são exemplos do Figma, não depoimentos verificados.
+Cada uma mostra três relatos ilustrativos, sem afirmar fatos sobre a empresa.
+CEP, distância e horários de fim de semana não foram inventados.
+O interruptor de exemplos inclui as duas oficinas do protótipo.
+
+origem pode ser ficticia, prototipo-figma ou real-verificada.
+O selo Verificada exige origem real-verificada e verificadoEm válido.
+WhatsApp só vira link com essa verificação e número válido no catálogo.
+Nenhum perfil atual tem contato habilitado. Há um modelo comentado de
+oficina real em dados.js para preencher após verificação e autorização.
+Oficina real começa sem avaliações, sem nota fictícia.
+
+DOCUMENTAÇÃO
+
+Leia VALIDACAO-E-MAPEAMENTO.md: relações com o SQL, campos ausentes, limites,
+verificações e pendências. Nenhum banco, Java ou diagrama foi alterado.
+O MANIFESTO.sha256 da raiz corresponde ao pacote original, não às edições.
 
 Origem do projeto: https://github.com/SalixJs/Projeto_garagem
 Fotografia: Unsplash, https://unsplash.com/photos/1503376780353-7e6692767b70
-Arquivo obtido de images.unsplash.com/photo-1503376780353-7e6692767b70.
-Fontes: Barlow Condensed e DM Sans, Google Fonts, com fallback local.
-Ilustrações e ícones vetoriais criados para esta interface.
-
-Para editar: abra esta pasta no Visual Studio Code.
-
-ATUALIZAÇÃO DO PROTÓTIPO — 16/11/2026
-
-Copie a pasta inteira site/garagem para htdocs/garagem, incluindo dados.js.
-Abra http://localhost/garagem/ após iniciar o Apache.
-Esta edição está na cópia do repositório; a instalação no XAMPP é separada.
-
-dados.js é carregado antes de app.js e contém 11 guias e 8 oficinas fictícias.
-Detalhes usam #guia/<id>, #oficina/<id> e #oficina/<id>/avaliacoes.
-Filtros de guias incluem situação legal; oficinas têm busca, cidade, serviço,
-especialidades, nota, distância simulada e ordenação.
-
-Classificações e roteiros são editoriais e a validar. Faixas de custo são
-exemplos fictícios, não cotações ou taxas oficiais. A referência 916/2022
-foi mantida com TODO de conferência.
-
-#cadastro é demonstração: Usuário tem uma etapa; Dono de oficina tem cinco.
-Não cria conta, não tem senha, não envia nem grava os dados do formulário.
-Campos e arquivos são descartados ao concluir, cancelar ou sair.
-Não há upload, consulta de CEP nem consulta cadastral do CNPJ.
-
-Persistência restrita a favoritos e checklists no navegador. Checklists
-específicos usam chaves v2, sem reaproveitar os itens genéricos anteriores.
-
-Leia VALIDACAO-E-MAPEAMENTO.md para campos SQL, lacunas e verificações.
-O MANIFESTO.sha256 da raiz descreve o pacote original, não esta edição.
+Imagem: images.unsplash.com/photo-1503376780353-7e6692767b70
+Fontes: Barlow Condensed e DM Sans. Ícones vetoriais da interface.

@@ -57,3 +57,90 @@ address{font-style:normal;line-height:1.9;color:var(--muted)}
 .form-error{color:var(--ink);font-weight:600;border-left:3px solid var(--orange);padding-left:12px}
 .form-error:empty{display:none}textarea:focus-visible{outline:3px solid var(--blue);outline-offset:4px}
 #registration-restart{margin:12px}
+
+/* Abas compartilhadas e sessão exclusivamente demonstrativa. */
+.header-inner{height:auto;min-height:92px;display:grid;grid-template-columns:auto 1fr auto;gap:12px 24px;padding-top:18px;padding-bottom:0}
+.header-inner .brand{grid-column:1;grid-row:1}
+.header-inner .saved-link{grid-column:3;grid-row:1}
+.session-controls{grid-column:2;grid-row:1;display:flex;align-items:center;justify-content:flex-end;gap:14px;min-width:0}
+.session-controls .button{min-height:40px;padding:8px 15px;font-size:13px}
+.session-label{font-size:12px;line-height:1.5;text-align:right;overflow-wrap:anywhere}
+.session-label strong,.session-label small{display:block}
+.session-label small{color:var(--muted)}
+.header-inner nav{grid-row:2;grid-column:1/-1;justify-content:center;flex-wrap:wrap;gap:8px 32px;height:auto;min-height:46px}
+.header-inner nav a{padding:10px 0}
+.header-inner nav a.active:after{bottom:0}
+.progress-list{list-style:none;padding:0;max-width:76ch}
+.progress-list li{padding:16px 0;border-bottom:1px solid var(--line);display:grid;gap:8px}
+.progress-list span{font-size:13px;color:var(--muted)}
+.progress-list progress{accent-color:var(--blue);width:100%;height:10px}
+.owner-summary{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;padding:24px;background:var(--white);border:1px solid var(--line);border-radius:8px}
+#owner-form{max-width:900px}#owner-form h3{font-size:16px}
+#owner-file-summary{overflow-wrap:anywhere;font-size:13px}
+.profile-top{padding:30px 0;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.rating-chip{display:inline-block;background:var(--white);border:1px solid var(--line);border-radius:30px;padding:9px 16px;font-size:12px;color:var(--ink)}
+.profile-identity{display:flex;align-items:center;gap:28px;margin:8px 0 24px}
+.profile-identity h1{font-size:54px;margin:0 0 15px;overflow-wrap:anywhere}
+.profile-identity p{max-width:72ch;margin-bottom:0}
+.profile-logo{width:108px;height:108px;border:1px solid var(--line);border-radius:50%;background:var(--ink);color:var(--white);display:grid;place-items:center;position:relative;overflow:hidden;flex-shrink:0;font-family:var(--display);font-size:38px}
+.profile-logo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:var(--white)}
+.profile-address{display:flex;align-items:flex-start;gap:12px;margin:24px 0;overflow-wrap:anywhere}
+.profile-address .icon{margin-top:5px;color:var(--blue)}
+.profile-contact{margin:24px 0}
+.profile-contact .help{margin-top:10px}
+.opening-hours{margin:0}
+.opening-hours>div{display:grid;grid-template-columns:160px 1fr;padding:12px 0;border-bottom:1px solid var(--line);gap:15px}
+.opening-hours dt{font-weight:600}.opening-hours dd{margin:0;overflow-wrap:anywhere}
+.rating-overview{display:flex;gap:24px;align-items:center}
+.rating-number{font-family:var(--display);font-size:74px;line-height:1}
+.rating-stars{color:var(--blue);font-size:23px;letter-spacing:3px}
+.rating-overview p{font-size:13px;margin:8px 0 0}
+.workshop-profile .review-summary{padding:24px;border:1px solid var(--line);border-radius:8px;background:var(--white)}
+.login-page {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(32px, 7vw, 110px);
+  padding-block: clamp(40px, 7vw, 100px);
+}
+.login-intro .page-heading { padding: 0; }
+.login-intro .notice { margin: 28px 0 0; }
+.login-panel {
+  padding: clamp(20px, 3vw, 40px);
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.login-panel fieldset { border: 0; padding: 0; margin: 0 0 24px; }
+.login-panel legend { padding: 0; margin-bottom: 14px; font-size: 20px; }
+.login-panel .chips { margin: 0; }
+.login-panel .choice-chip { min-height: 44px; }
+.login-panel .button { width: 100%; }
+.login-links { display: flex; gap: 0 24px; flex-wrap: wrap; border-top: 1px solid var(--line); margin-top: 24px; padding-top: 12px; }
+.login-links a { min-height: 44px; white-space: normal; }
+.owner-summary + section { margin-top: 36px; }
+.owner-summary > div { min-width: 0; overflow-wrap: anywhere; }
+.rating-number, .rating-chip, .opening-hours dd { font-variant-numeric: tabular-nums; }
+.choice-chip:has(input:focus-visible) { outline: 3px solid var(--blue); outline-offset: 3px; }
+@media (max-width: 800px) {
+  .login-page { grid-template-columns: 1fr; gap: 24px; padding-block: 32px 44px; }
+}
+@media(max-width:650px){
+ .header-inner{grid-template-columns:1fr auto;gap:10px;padding-top:18px}
+ .header-inner .saved-link{grid-column:2;grid-row:1;margin-left:0}
+ .session-controls{grid-column:1/-1;grid-row:2;justify-content:space-between}
+ .session-label{text-align:left}
+ .header-inner nav{grid-row:3;gap:4px 18px;justify-content:flex-start;width:100%;height:auto;min-height:42px}
+ .header-inner nav a{display:inline-flex;align-items:center;min-height:44px;font-size:13px;padding:8px 0}
+ .header-inner .saved-link,.session-controls .button{min-height:44px}
+ .choice-chip,.chip,.save{min-height:44px}
+ .save{width:44px}
+ .field input,.field select,.field textarea,.search input{font-size:16px}
+ .owner-summary{flex-direction:column;padding:18px}
+ .profile-identity{flex-direction:column;align-items:flex-start;gap:20px}
+ .profile-identity h1{font-size:42px}.profile-logo{width:88px;height:88px;font-size:32px}
+ .profile-top{padding:24px 0;gap:15px}.rating-chip{max-width:100%;overflow-wrap:anywhere}
+ .opening-hours>div{grid-template-columns:1fr;gap:3px}
+ .rating-overview{gap:16px}.rating-number{font-size:60px}
+ .workshop-profile .review-summary{padding:18px}
+}

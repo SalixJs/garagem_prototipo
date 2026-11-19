@@ -932,7 +932,7 @@ const guias = [
   }
 ];
 
-// Todos os perfis, endereços, diferenciais, relatos, distâncias e prazos são fictícios.
+// Origens distinguem ficção e exemplos transcritos do protótipo, não empresas verificadas.
 const oficinas = [
   {
     "id": 1,
@@ -994,7 +994,14 @@ const oficinas = [
       "Conferência de folgas e alinhamento prevista na entrega.",
       "Revisão das fixações combinada na ordem de serviço."
     ],
-    "prazoMedioExemplo": "2 a 4 dias úteis (exemplo)"
+    "prazoMedioExemplo": "2 a 4 dias úteis (exemplo)",
+    "origem": "ficticia",
+    "logo": "",
+    "horariosPorDia": {
+      "semana": "Segunda a sexta, 8h às 18h",
+      "sabado": "8h às 12h (exemplo)",
+      "domingo": "Fechado (exemplo)"
+    }
   },
   {
     "id": 2,
@@ -1048,7 +1055,14 @@ const oficinas = [
       "Registro fotográfico da condição inicial da pintura.",
       "Orientações de conservação previstas na entrega."
     ],
-    "prazoMedioExemplo": "4 a 7 dias úteis (exemplo)"
+    "prazoMedioExemplo": "4 a 7 dias úteis (exemplo)",
+    "origem": "ficticia",
+    "logo": "",
+    "horariosPorDia": {
+      "semana": "Segunda a sexta, 9h às 18h",
+      "sabado": "Fechado (exemplo)",
+      "domingo": "Fechado (exemplo)"
+    }
   },
   {
     "id": 3,
@@ -1118,7 +1132,14 @@ const oficinas = [
       "Proposta que relaciona motor, arrefecimento e transmissão.",
       "Relatório de configuração e revisões previsto na entrega."
     ],
-    "prazoMedioExemplo": "5 a 10 dias úteis (exemplo)"
+    "prazoMedioExemplo": "5 a 10 dias úteis (exemplo)",
+    "origem": "ficticia",
+    "logo": "",
+    "horariosPorDia": {
+      "semana": "Segunda a sexta, 8h às 18h",
+      "sabado": "8h às 12h (exemplo)",
+      "domingo": "Fechado (exemplo)"
+    }
   },
   {
     "id": 4,
@@ -1180,7 +1201,14 @@ const oficinas = [
       "Checagem de espaço entre rodas e componentes prevista no orçamento.",
       "Lista de componentes e plano de revisão na entrega."
     ],
-    "prazoMedioExemplo": "1 a 3 dias úteis (exemplo)"
+    "prazoMedioExemplo": "1 a 3 dias úteis (exemplo)",
+    "origem": "ficticia",
+    "logo": "",
+    "horariosPorDia": {
+      "semana": "Segunda a sexta, 9h às 18h",
+      "sabado": "Fechado (exemplo)",
+      "domingo": "Fechado (exemplo)"
+    }
   },
   {
     "id": 5,
@@ -1234,7 +1262,14 @@ const oficinas = [
       "Organização de comprovantes para consulta ao órgão de trânsito.",
       "Orçamento distingue instalação de serviços de avaliação externos."
     ],
-    "prazoMedioExemplo": "7 a 15 dias úteis (exemplo)"
+    "prazoMedioExemplo": "7 a 15 dias úteis (exemplo)",
+    "origem": "ficticia",
+    "logo": "",
+    "horariosPorDia": {
+      "semana": "Segunda a sexta, 8h às 18h",
+      "sabado": "8h às 12h (exemplo)",
+      "domingo": "Fechado (exemplo)"
+    }
   },
   {
     "id": 6,
@@ -1295,7 +1330,14 @@ const oficinas = [
       "Orçamento separa instalação elétrica e acabamento interno.",
       "Orientação sobre acesso futuro aos componentes de áudio."
     ],
-    "prazoMedioExemplo": "2 a 5 dias úteis (exemplo)"
+    "prazoMedioExemplo": "2 a 5 dias úteis (exemplo)",
+    "origem": "ficticia",
+    "logo": "",
+    "horariosPorDia": {
+      "semana": "Segunda a sexta, 9h às 18h",
+      "sabado": "Fechado (exemplo)",
+      "domingo": "Fechado (exemplo)"
+    }
   },
   {
     "id": 7,
@@ -1349,7 +1391,14 @@ const oficinas = [
       "Conferência de folgas e fixações prevista na montagem.",
       "Orientação para avaliar ressonância e revisar o conjunto."
     ],
-    "prazoMedioExemplo": "1 a 4 dias úteis (exemplo)"
+    "prazoMedioExemplo": "1 a 4 dias úteis (exemplo)",
+    "origem": "ficticia",
+    "logo": "",
+    "horariosPorDia": {
+      "semana": "Segunda a sexta, 8h às 18h",
+      "sabado": "8h às 12h (exemplo)",
+      "domingo": "Fechado (exemplo)"
+    }
   },
   {
     "id": 8,
@@ -1419,8 +1468,150 @@ const oficinas = [
       "Escopo de calibração apresentado antes da intervenção.",
       "Histórico de configuração previsto para diagnóstico posterior."
     ],
-    "prazoMedioExemplo": "1 a 3 dias úteis (exemplo)"
+    "prazoMedioExemplo": "1 a 3 dias úteis (exemplo)",
+    "origem": "ficticia",
+    "logo": "",
+    "horariosPorDia": {
+      "semana": "Segunda a sexta, 9h às 18h",
+      "sabado": "Fechado (exemplo)",
+      "domingo": "Fechado (exemplo)"
+    }
+  },
+  {
+    "id": 9,
+    "nomeFantasia": "Patrick Suspensões",
+    "descricao": "Especializados em suspensões especiais e preparação do chassi",
+    "horarios": "Segunda a sexta, 08:00 às 18:00",
+    "horariosPorDia": {
+      "semana": "08:00 às 18:00",
+      "sabado": "Não informado no protótipo",
+      "domingo": "Não informado no protótipo"
+    },
+    "cep": "",
+    "logradouro": "Estr. José Kalinoski",
+    "numero": "2",
+    "bairro": "Contorno",
+    "cidade": "Ponta Grossa",
+    "uf": "PR",
+    "servicos": [
+      "Suspensões a Ar",
+      "Chapeamento",
+      "Suspensões Comuns"
+    ],
+    "especialidade": "Suspensão",
+    "distanciaKm": null,
+    "notaMedia": 4.8,
+    "totalAvaliacoes": 232,
+    "avaliacoes": [
+      {
+        "id": 901,
+        "autor": "Leitor de exemplo A",
+        "data": null,
+        "estrelas": 5,
+        "descricao": "Relato fictício para demonstrar a leitura de uma avaliação. Não descreve atendimento nem serviço realizado por esta empresa.",
+        "ficticia": true
+      },
+      {
+        "id": 902,
+        "autor": "Leitor de exemplo B",
+        "data": null,
+        "estrelas": 4,
+        "descricao": "Comentário de exemplo do layout: aqui seria exibida a experiência de um cliente após verificação e publicação. Não é um depoimento real.",
+        "ficticia": true
+      },
+      {
+        "id": 903,
+        "autor": "Leitor de exemplo C",
+        "data": null,
+        "estrelas": 5,
+        "descricao": "Texto ilustrativo da interface de avaliações, sem afirmar qualidade, prazo, preço ou fatos sobre o estabelecimento.",
+        "ficticia": true
+      }
+    ],
+    "origem": "prototipo-figma",
+    "ficticia": true,
+    "logo": "",
+    "diferenciais": [],
+    "prazoMedioExemplo": ""
+  },
+  {
+    "id": 10,
+    "nomeFantasia": "ACF Performance",
+    "descricao": "Especializados em performance e preparação automotiva",
+    "horarios": "Segunda a sexta, 08:00 às 18:00",
+    "horariosPorDia": {
+      "semana": "08:00 às 18:00",
+      "sabado": "Não informado no protótipo",
+      "domingo": "Não informado no protótipo"
+    },
+    "cep": "",
+    "logradouro": "Av. Dr. Ricardo Jafet",
+    "numero": "1050",
+    "bairro": "Ipiranga",
+    "cidade": "São Paulo",
+    "uf": "SP",
+    "servicos": [
+      "Remap",
+      "Escapamento",
+      "Turbo",
+      "Preparação de motores"
+    ],
+    "especialidade": "Performance",
+    "distanciaKm": null,
+    "notaMedia": 4.9,
+    "totalAvaliacoes": 521,
+    "avaliacoes": [
+      {
+        "id": 1001,
+        "autor": "Leitor de exemplo A",
+        "data": null,
+        "estrelas": 5,
+        "descricao": "Relato fictício para demonstrar a leitura de uma avaliação. Não descreve atendimento nem serviço realizado por esta empresa.",
+        "ficticia": true
+      },
+      {
+        "id": 1002,
+        "autor": "Leitor de exemplo B",
+        "data": null,
+        "estrelas": 4,
+        "descricao": "Comentário de exemplo do layout: aqui seria exibida a experiência de um cliente após verificação e publicação. Não é um depoimento real.",
+        "ficticia": true
+      },
+      {
+        "id": 1003,
+        "autor": "Leitor de exemplo C",
+        "data": null,
+        "estrelas": 5,
+        "descricao": "Texto ilustrativo da interface de avaliações, sem afirmar qualidade, prazo, preço ou fatos sobre o estabelecimento.",
+        "ficticia": true
+      }
+    ],
+    "origem": "prototipo-figma",
+    "ficticia": true,
+    "logo": "",
+    "diferenciais": [],
+    "prazoMedioExemplo": ""
   }
 ];
+
+/* MODELO DE OFICINA REAL — NÃO faz parte do catálogo executado.
+Preencher somente após verificação e autorização de publicação pelo responsável.
+Não copiar notas ou relatos do protótipo para um estabelecimento real.
+{
+  id: null, nomeFantasia: '', descricao: '',
+  origem: 'real-verificada', verificadoEm: '', // data de revisão YYYY-MM-DD
+  fonteDosDados: '', autorizacaoPublicacao: '', // referência da fonte e da autorização
+  ficticia: false, logo: '', // caminho local em assets/, com uso autorizado
+  fotos: [], // caminhos de imagens autorizadas; a demonstração não faz upload
+  horarios: '', horariosPorDia: {semana: '', sabado: '', domingo: ''},
+  cep: '', logradouro: '', numero: '', bairro: '', cidade: '', uf: '',
+  servicos: [], especialidade: '', distanciaKm: null,
+  whatsapp: '', // somente número público verificado, com país/DDD, sem pontuação
+  notaMedia: null, totalAvaliacoes: 0, avaliacoes: [],
+  diferenciais: [], prazoMedioExemplo: ''
+}
+Sem avaliações: exibir “Ainda sem avaliações”. Nota e total serão derivados de relatos reais;
+nunca preencher com uma nota estimada. O selo depende de origem e verificadoEm.
+*/
 
 window.GaragemDados = { guias, oficinas };
