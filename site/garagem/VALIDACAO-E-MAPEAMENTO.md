@@ -204,6 +204,14 @@ O Impeccable encerrou a revisão sem apontamentos no código de interface. A Tas
 - Backend: autenticação, hash de senha, sessão real, autorização pela FK do dono, cadastros transacionais e avaliações vinculadas a entusiastas.
 - Modelo de dados: decidir colunas/entidades para origem/verificação, endereço completo, status, preferências, conteúdo editorial, favoritos e checklists. Nenhuma migração foi executada.
 
+### Identidade visual baseada no DESIGN.md
+
+A identidade atual usa a referência automotiva fornecida para o Garagem. A abertura exibe a foto original em largura total, a marca centralizada e duas ações para os destinos do site. A paleta preta e a tipografia se estendem aos guias, filtros, avisos, cadastro, editor e perfis. O menu do cabeçalho reúne as rotas e os salvos. Os testes de layout anteriores documentam a versão visual daquela etapa.
+
+O arquivo `identidade.css` implementa a apresentação sobre a estrutura responsiva de `style.css`. DM Sans local é a fonte dos títulos. Garamond e Georgia compõem a pilha serifada de leitura. Cascadia Mono e Consolas compõem a pilha dos controles e rótulos. Essas famílias substituem as fontes proprietárias citadas na referência.
+
+O teste em Chrome percorreu 15 telas ou estados entre 320 e 1440 px, em seis larguras. As 90 combinações passaram nas medições de transbordamento, colisão do cabeçalho, alinhamento de cartões e acesso aos botões da abertura. Passaram 11 verificações de interação e apresentação, incluindo abertura por Enter, navegação por Tab, fechamento por Escape, devolução de foco e toque emulado. A suíte funcional passou no desktop (256 verificações), no celular emulado (256) e na recarga (9). O axe-core avaliou os 15 estados a 390 px e registrou zero violações automáticas. Alguns itens de contraste no início, no menu aberto e no perfil público exigem avaliação visual.
+
 ## Referências
 
 - Referência legal mantida: https://www.gov.br/transportes/pt-br/assuntos/transito/conteudo-contran/resolucao-contran-no-916-de-28-de-marco-de-2022

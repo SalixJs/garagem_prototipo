@@ -76,4 +76,8 @@ O MANIFESTO.sha256 da raiz corresponde ao pacote original, não às edições.
 Origem do projeto: https://github.com/SalixJs/Projeto_garagem
 Fotografia: Unsplash, https://unsplash.com/photos/1503376780353-7e6692767b70
 Imagem: images.unsplash.com/photo-1503376780353-7e6692767b70
-Fontes: Barlow Condensed e DM Sans. Ícones vetoriais da interface.
+Identidade visual baseada no DESIGN.md fornecido para o projeto. O arquivo
+identidade.css define a paleta preta, a tipografia e os componentes.
+Os títulos usam DM Sans local. O corpo usa Garamond ou Georgia e os controles
+usam a família monoespaçada disponível no aparelho. O menu do cabeçalho
+reúne as rotas e o acesso a Meus guias. Escape fecha o menu.

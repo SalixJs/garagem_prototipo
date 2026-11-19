@@ -1,3 +1,5 @@
+@layer estrutura, identidade;
+@layer estrutura {
 @font-face {
   font-family: 'Barlow Condensed';
   font-style: normal;
@@ -203,4 +205,6 @@ header, footer { flex: none; }
   .toolbar .search { align-self: stretch; min-width: 0; }
   .header-inner .saved-link { min-width: 44px; }
   .header-inner nav a { font-size: 13px; }
+}
+
 }

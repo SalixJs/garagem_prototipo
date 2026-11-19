@@ -160,7 +160,7 @@ function renderHome() {
   main.innerHTML = `<section class="hero" aria-labelledby="home-title">
     <img class="hero-image" src="assets/porsche.jpg" alt="Porsche escuro em uma estrada" fetchpriority="high">
     <div class="container"><div class="hero-copy">
-      <h1 id="home-title">Seu carro.<br>Seu projeto.</h1>
+      <h1 id="home-title"><span>Seu carro.</span> <span>Seu projeto.</span></h1>
       <p>Explore guias de modificação, confira o que precisa validar e encontre oficinas por especialidade.</p>
       <div class="actions"><a class="button" href="#guias">Explorar guias ${icon('arrow')}</a><a class="button secondary" href="#oficinas">Encontrar oficinas</a></div>
     </div></div>
@@ -720,6 +720,7 @@ window.addEventListener('storage', event => {
 });
 
 function route() {
+  document.querySelector('.site-menu').open = false;
   if (location.hash === '#main') { main.focus(); return; }
   document.querySelector('#registration-form')?.reset();
   const [view = 'inicio', id, child] = (location.hash.slice(1) || 'inicio').split('/');
@@ -779,6 +780,25 @@ document.querySelector('.skip').addEventListener('click', event => {
   main.scrollIntoView({block:'start'});
 });
 const header = document.querySelector('header');
+const siteMenu = header.querySelector('.site-menu');
+function closeMenuWithFocus() {
+  siteMenu.open = false;
+  siteMenu.querySelector('summary').focus();
+}
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && siteMenu.open) closeMenuWithFocus();
+});
+document.addEventListener('click', event => {
+  if (!siteMenu.open) return;
+  if (!siteMenu.contains(event.target)) siteMenu.open = false;
+  else if (event.target.closest('a')) {
+    siteMenu.open = false;
+    main.focus({preventScroll:true});
+  }
+});
+siteMenu.addEventListener('focusout', event => {
+  if (event.relatedTarget && !siteMenu.contains(event.relatedTarget)) siteMenu.open = false;
+});
 new ResizeObserver(() => {
   document.documentElement.style.setProperty('--header-height', header.offsetHeight + 'px');
 }).observe(header);
