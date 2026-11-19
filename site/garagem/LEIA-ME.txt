@@ -4,8 +4,9 @@ Atualizado em 18/11/2026.
 Copie esta pasta inteira para C:\xampp\htdocs\garagem e inicie o Apache.
 Acesso: http://localhost/garagem/
 HTML, CSS e JavaScript puros; sem build, pacotes ou conexão MySQL.
-dados.js deve carregar antes de app.js. Fontes Google exigem internet,
-mas há alternativas locais. Arquivos de imagem ficam em assets/.
+dados.js deve carregar antes de app.js. A foto, os ícones e as fontes são
+servidos pelo próprio XAMPP. Copie também assets/fonts com as fontes e suas
+licenças para manter a tipografia mesmo com a internet desligada.
 
 MODO DEMONSTRAÇÃO: SEM SENHA REAL, SEM CONTA REAL
 

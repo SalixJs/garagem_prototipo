@@ -180,6 +180,23 @@ O inventário exportado em 12/11 registra zero tabelas no dump de garagem2. O ar
 
 O site continua estático. A conferência leu os arquivos e exercitou as telas no navegador. Nenhum SQL foi executado e nenhuma conexão de login ou gravação no banco foi testada.
 
+### Qualidade de layout, interface e navegação — 18/11/2026
+
+| Problema observado | Correção e evidência |
+|---|---|
+| Cabeçalho de visitante com três linhas no celular | Marca, salvos e entrada compartilham uma linha. A navegação ocupa a segunda. A 390 px o cabeçalho passou de 171 para 99 px. |
+| Ações da página inicial abaixo da primeira tela a 320 × 568 | O título e o texto de abertura foram encurtados. A foto ocupa o espaço disponível abaixo do cabeçalho. Os dois links principais ficaram inteiros na primeira tela em todos os seis tamanhos testados. |
+| Cartões com ações em alturas diferentes no tablet | A grade de guias usa duas colunas entre 651 e 900 px. O espaço variável fica antes do custo. Os links das fichas terminam alinhados em cada linha nos tamanhos testados. |
+| Atalho para o conteúdo modificava a rota | O atalho move o foco para o conteúdo da tela aberta. Teclado testado também na seleção do perfil e na abertura e no fechamento dos filtros, incluindo a devolução do foco ao botão. |
+| Texto secundário de baixo contraste sobre o painel azul-claro | No guia Motor Turbo e na página O projeto, o contraste do texto pequeno passou de 4,14:1 para aproximadamente 6:1. |
+| Carregamento da tipografia dependia de um serviço externo | As fontes Barlow Condensed e DM Sans são servidas como WOFF2 locais, com as licenças em `assets/fonts/`. A verificação bloqueou os domínios do Google Fonts e confirmou as duas famílias carregadas. |
+
+**Cobertura.** Foram 84 combinações de 14 telas ou estados em seis tamanhos no Chrome: 320 × 568, 390 × 844, 650 × 800, 768 × 1024, 1024 × 768 e 1440 × 900. A amostra inclui início, lista e detalhe de guia, oficinas com o painel fechado e aberto, lista de exemplos, oficina e avaliações, salvos, sobre, cadastro, login, editor e perfil. Nos critérios medidos, houve zero casos de transbordamento horizontal, colisão entre controles do cabeçalho ou desalinhamento dos links dos cartões na mesma linha.
+
+Oito verificações específicas cobriram teclado, foco, toque emulado, preferência por movimento reduzido e fontes locais. A suíte funcional passou em desktop (256), recarga (9) e celular emulado (256). O axe-core 4.10.3 retornou zero violações automáticas nas 14 telas ou estados a 390 px. A ferramenta deixou itens de contraste para avaliação humana no início e nos perfis público e administrativo da oficina. A revisão incluiu capturas do Chrome. Safari/iOS físico, leitor de tela e estudo com participantes ficam fora desta medição.
+
+O Impeccable encerrou a revisão sem apontamentos no código de interface. A Taste ainda sinaliza a altura das seções de conteúdo, recuos internos e a posição de início da foto. Seu relatório mediu a navegação como 0 px. Medidas diretas do navegador confirmaram que a foto começa após o cabeçalho e termina na borda inferior da primeira tela nas seis larguras. As seções seguintes mantêm a altura de leitura e os cartões mantêm espaçamento interno.
+
 ### Pendências do responsável
 
 - Oficinas reais: autorização de publicação, fonte, data de verificação, endereço, horários, contato público e imagens autorizadas.

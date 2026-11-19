@@ -87,22 +87,22 @@ function guideCard(guide) {
 }
 function renderGuides() {
   category = 'Todos'; query = ''; legal = '';
-  main.innerHTML = `<div class="container">${pageHeader('Toda mudança começa com um plano.', 'Roteiros editoriais para consultar o órgão de trânsito. Classificações e faixas ainda precisam de validação.')}
+  main.innerHTML = `<div class="container">${pageHeader('Guias de modificação', 'Roteiros editoriais para consultar o órgão de trânsito. Classificações e faixas ainda precisam de validação.')}
     <div class="page-content"><div class="toolbar">
       <label class="search">${icon('search')}<input id="guide-search" type="search" aria-label="Buscar guias" placeholder="Busque uma modificação"></label>
       <label class="field">Situação legal<select id="legal-filter">${options(Object.keys(legalLabels),'Todas as situações').replace(/>(permitida|exige-regularizacao|restricao-relevante)</g, (_,key)=>`>${legalLabels[key]}<`)}</select></label>
-    </div><div class="chips" aria-label="Categorias">${['Todos', ...new Set(guides.map(g => g.categoria))].map(value => `<button class="chip" data-category="${escapeHTML(value)}" aria-pressed="${value === 'Todos'}">${escapeHTML(value)}</button>`).join('')}</div>
+    </div><div class="chips" role="group" aria-label="Categorias">${['Todos', ...new Set(guides.map(g => g.categoria))].map(value => `<button class="chip" data-category="${escapeHTML(value)}" aria-pressed="${value === 'Todos'}">${escapeHTML(value)}</button>`).join('')}</div>
     <div class="result-count" id="guide-count" aria-live="polite"></div><div id="guide-results" class="guide-grid"></div></div></div>`;
   filterGuides();
 }
 function filterGuides() {
   const result = guides.filter(g => (category === 'Todos' || g.categoria === category) && (!legal || g.situacaoLegal === legal) && normalize(`${g.titulo} ${g.descricao} ${g.categoria} ${legalLabels[g.situacaoLegal]}`).includes(normalize(query)));
-  document.querySelector('#guide-count').textContent = `${result.length} guia(s) encontrado(s)`;
+  document.querySelector('#guide-count').textContent = `${result.length} ${result.length === 1 ? 'guia encontrado' : 'guias encontrados'}`;
   document.querySelector('#guide-results').innerHTML = result.length ? result.map(guideCard).join('') : `<div class="empty full-width"><h3>Nenhum guia com essa busca</h3><p>Tente outra palavra ou remova os filtros.</p><button class="button light" data-reset-guides>Limpar filtros</button></div>`;
   updateSaved();
 }
 function renderSaved() {
-  main.innerHTML = `<div class="container">${pageHeader('Seus próximos projetos.', 'Favoritos e checklists ficam somente neste navegador.')}<div class="page-content">${saved.length ? `<div class="guide-grid">${guides.filter(g => saved.includes(g.id)).map(guideCard).join('')}</div>` : '<div class="empty"><h3>Seu primeiro projeto começa com uma ideia.</h3><p>Salve um guia para encontrá-lo aqui depois.</p><a class="button" href="#guias">Explorar guias</a></div>'}</div></div>`;
+  main.innerHTML = `<div class="container">${pageHeader('Meus guias salvos', 'Favoritos e checklists ficam somente neste navegador.')}<div class="page-content">${saved.length ? `<div class="guide-grid">${guides.filter(g => saved.includes(g.id)).map(guideCard).join('')}</div>` : '<div class="empty"><h3>Seu primeiro projeto começa com uma ideia.</h3><p>Salve um guia para encontrá-lo aqui depois.</p><a class="button" href="#guias">Explorar guias</a></div>'}</div></div>`;
   updateSaved();
 }
 // Chaves v2 não reaproveitam marcações do checklist genérico antigo.
@@ -155,8 +155,16 @@ function updateProgress() {
 function renderNotFound(type) {
   main.innerHTML = `<div class="container section empty"><h1>${type} não encontrado</h1><p>O endereço não corresponde ao catálogo atual.</p><a class="button" href="#inicio">Ir ao início</a></div>`;
 }
-const mapArt=`<div class="map-art" aria-label="Ilustração de mapa"><svg viewBox="0 0 500 320" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="500" height="320" fill="#dce5eb"/><path d="M0 80 500 250M50 0 200 320M280 0 390 320M0 270 500 70" stroke="#f9fbfd" stroke-width="23"/><path d="M0 80 500 250M50 0 200 320M280 0 390 320M0 270 500 70" stroke="#c5d2dd" stroke-width="2"/><path d="M420 0C300 100 520 200 440 320" fill="none" stroke="#b5ccdf" stroke-width="30"/><path d="m35 130 65 22 21 63-64-22Z" fill="#bdd2c9"/><path d="m205 35 48 14 19 53-46-17Z" fill="#bdd2c9"/><g fill="#f0804b" stroke="white" stroke-width="4"><circle cx="130" cy="70" r="10"/><circle cx="370" cy="230" r="10"/><circle cx="230" cy="260" r="8"/></g></svg><div class="map-badge">${icon('pin')}<div><strong>O próximo passo é por perto.</strong><small>Explore serviços e especialidades</small></div></div></div>`;
-function renderHome(){main.innerHTML=`<section class="hero"><img class="hero-image" src="assets/porsche.jpg" alt="Porsche escuro em uma estrada" fetchpriority="high"><div class="container"><div class="hero-copy"><div class="hero-label">Seu ponto de partida para modificar</div><h1>Seu carro.<br>Seu projeto.<br>O caminho começa aqui.</h1><p>Da primeira ideia à próxima modificação. Explore guias e encontre o caminho para tirar seu projeto do papel.</p><div class="actions"><a class="button" href="#guias">Explorar guias ${icon('arrow')}</a><a class="button secondary" href="#oficinas">Encontrar oficinas</a></div></div><div class="hero-caption">Paixão por carros. Informação para começar.</div></div></section><section class="benefits" aria-label="Sobre o Garagem"><div class="container"><div class="benefit">${icon('book')}<div><strong>Comece com informação</strong><small>Roteiros para planejar sua modificação</small></div></div><div class="benefit">${icon('pin')}<div><strong>Encontre sua especialidade</strong><small>Busca por região e tipo de serviço</small></div></div><div class="benefit">${icon('shield')}<div><strong>Consulte a fonte</strong><small>Referências oficiais para ir além</small></div></div></div></section><section class="container section"><div class="section-heading"><div><h2>Qual é o seu próximo projeto?</h2><p>Escolha uma modificação e descubra por onde começar.</p></div><a class="text-link" href="#guias">Ver todos os guias ${icon('arrow')}</a></div><div class="guide-grid">${guides.slice(0,3).map(guideCard).join('')}</div></section><section class="container section" style="padding-top:0"><div class="workshop-banner"><div class="banner-copy"><h2>Um bom projeto precisa da oficina certa.</h2><p>Encontre especialidades e compare serviços. O diretório está em formação; conheça a experiência com perfis de exemplo.</p><a href="#oficinas" class="button">Explorar oficinas ${icon('arrow')}</a></div>${mapArt}</div><div class="how"><h2>Da ideia ao próximo passo.</h2><div class="how-grid"><div class="step"><span class="step-number">01</span><div><h3>Escolha a modificação</h3><p>Encontre o tema do seu projeto e organize suas dúvidas.</p></div></div><div class="step"><span class="step-number">02</span><div><h3>Confira as exigências</h3><p>Use as fontes oficiais e confirme o procedimento no seu estado.</p></div></div><div class="step"><span class="step-number">03</span><div><h3>Converse com uma oficina</h3><p>Procure a especialidade certa antes de decidir o próximo passo.</p></div></div></div></div></section>`;}
+const mapArt=`<div class="map-art" role="img" aria-label="Ilustração de mapa"><svg viewBox="0 0 500 320" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="500" height="320" fill="#dce5eb"/><path d="M0 80 500 250M50 0 200 320M280 0 390 320M0 270 500 70" stroke="#f9fbfd" stroke-width="23"/><path d="M0 80 500 250M50 0 200 320M280 0 390 320M0 270 500 70" stroke="#c5d2dd" stroke-width="2"/><path d="M420 0C300 100 520 200 440 320" fill="none" stroke="#b5ccdf" stroke-width="30"/><path d="m35 130 65 22 21 63-64-22Z" fill="#bdd2c9"/><path d="m205 35 48 14 19 53-46-17Z" fill="#bdd2c9"/><g fill="#f0804b" stroke="white" stroke-width="4"><circle cx="130" cy="70" r="10"/><circle cx="370" cy="230" r="10"/><circle cx="230" cy="260" r="8"/></g></svg><div class="map-badge">${icon('pin')}<div><strong>O próximo passo é por perto.</strong><small>Explore serviços e especialidades</small></div></div></div>`;
+function renderHome() {
+  main.innerHTML = `<section class="hero" aria-labelledby="home-title">
+    <img class="hero-image" src="assets/porsche.jpg" alt="Porsche escuro em uma estrada" fetchpriority="high">
+    <div class="container"><div class="hero-copy">
+      <h1 id="home-title">Seu carro.<br>Seu projeto.</h1>
+      <p>Explore guias de modificação, confira o que precisa validar e encontre oficinas por especialidade.</p>
+      <div class="actions"><a class="button" href="#guias">Explorar guias ${icon('arrow')}</a><a class="button secondary" href="#oficinas">Encontrar oficinas</a></div>
+    </div></div>
+  </section><section class="benefits" aria-label="Sobre o Garagem"><div class="container"><div class="benefit">${icon('book')}<div><strong>Comece com informação</strong><small>Roteiros para planejar sua modificação</small></div></div><div class="benefit">${icon('pin')}<div><strong>Encontre sua especialidade</strong><small>Busca por região e tipo de serviço</small></div></div><div class="benefit">${icon('shield')}<div><strong>Consulte a fonte</strong><small>Referências oficiais para ir além</small></div></div></div></section><section class="container section"><div class="section-heading"><div><h2>Qual é o seu próximo projeto?</h2><p>Escolha uma modificação e descubra por onde começar.</p></div><a class="text-link" href="#guias">Ver todos os guias ${icon('arrow')}</a></div><div class="guide-grid">${guides.slice(0,3).map(guideCard).join('')}</div></section><section class="container section" style="padding-top:0"><div class="workshop-banner"><div class="banner-copy"><h2>Um bom projeto precisa da oficina certa.</h2><p>Encontre especialidades e compare serviços. O diretório está em formação; conheça a experiência com perfis de exemplo.</p><a href="#oficinas" class="button">Explorar oficinas ${icon('arrow')}</a></div>${mapArt}</div><div class="how"><h2>Da ideia ao próximo passo.</h2><div class="how-grid"><div class="step"><span class="step-number">01</span><div><h3>Escolha a modificação</h3><p>Encontre o tema do seu projeto e organize suas dúvidas.</p></div></div><div class="step"><span class="step-number">02</span><div><h3>Confira as exigências</h3><p>Use as fontes oficiais e confirme o procedimento no seu estado.</p></div></div><div class="step"><span class="step-number">03</span><div><h3>Converse com uma oficina</h3><p>Procure a especialidade certa antes de decidir o próximo passo.</p></div></div></div></div></section>`;}
 function pageHeader(title,desc){return `<div class="page-heading"><a class="breadcrumb" href="#inicio">Início <span aria-hidden="true">/</span></a><h1>${title}</h1><p>${desc}</p></div>`;}
 
 const specialties = ['Turbo','Motor','Suspensão','Freios','Áudio','Estética','Escapamento','Performance','Remap','Legalização'];
@@ -164,7 +172,7 @@ let workshopQuery = '';
 const defaultFilters = () => ({order:'distance', specialties:[], rating:0, distance:''});
 let workshopFilters = defaultFilters();
 function renderWorkshops() {
-  main.innerHTML = `<div class="container">${pageHeader('Encontre quem entende do seu projeto.','Compare especialidades e conheça a experiência do diretório em formação.')}
+  main.innerHTML = `<div class="container">${pageHeader('Oficinas','Busque por cidade, serviço ou especialidade.')}
     <div class="page-content"><div class="notice"><strong>Nosso diretório está em formação.</strong><p>Os selos distinguem perfis fictícios, exemplos transcritos do protótipo e dados verificados pelo responsável. Os exemplos não comprovam informações de empresas reais; notas e relatos ilustrativos estão identificados.</p></div>
     <label class="demo-switch"><input type="checkbox" id="demo" ${demo?'checked':''}> Mostrar oficinas de exemplo</label>
     <div class="toolbar"><label class="search">${icon('search')}<input id="workshop-search" type="search" aria-label="Buscar oficinas" placeholder="Nome, cidade ou serviço" value="${escapeHTML(workshopQuery)}"></label>
@@ -237,7 +245,7 @@ function filterWorkshops() {
   const result = matchingWorkshops().filter(w=>demo || isVerifiedWorkshop(w));
   const orderLabel = {distance:'Mais próximas',rating:'Melhor avaliadas',reviews:'Mais avaliadas'}[workshopFilters.order];
   document.querySelector('#filter-summary').textContent = `${orderLabel} · Nota: ${workshopFilters.rating || 'todas'} · Distância: ${workshopFilters.distance ? (workshopFilters.distance === '20+' ? '20 km ou mais' : 'até '+workshopFilters.distance+' km') : 'todas'} · Especialidades: ${workshopFilters.specialties.join(', ') || 'todas'}`;
-  document.querySelector('#workshop-count').textContent = demo ? `${result.length} perfil(is), incluindo exemplos` : `${result.length} oficina(s) verificada(s)`;
+  document.querySelector('#workshop-count').textContent = demo ? `${result.length} ${result.length === 1 ? 'perfil' : 'perfis'}, incluindo exemplos` : `${result.length} ${result.length === 1 ? 'oficina verificada' : 'oficinas verificadas'}`;
   document.querySelector('#workshop-results').innerHTML = result.length ? `<div class="workshop-grid">${result.map(workshopCard).join('')}</div>` : `<div class="empty">${icon('pin')}<h3>${demo?'Nenhum resultado para esses filtros':'Nenhuma oficina verificada nesta busca'}</h3><p>${demo?'Tente outra combinação ou limpe os filtros.':'O diretório está em formação. Ative os exemplos para conhecer a experiência.'}</p><button class="button light" ${demo?'data-reset-workshops':'data-show-demo'}>${demo?'Limpar filtros':'Conhecer os perfis de exemplo'}</button></div>`;
 }
 function resetWorkshops() { city = ''; service = ''; workshopQuery = ''; workshopFilters = defaultFilters(); renderWorkshops(); document.querySelector('#workshop-search').focus(); }
@@ -275,7 +283,7 @@ function renderWorkshop(id, allReviews = false) {
     ${workshopNotice(w)}
     <section class="reading"><h2>Horário de funcionamento</h2>${hours?`<dl class="opening-hours"><div><dt>Segunda a sexta</dt><dd>${escapeHTML(hours.semana)}</dd></div><div><dt>Sábado</dt><dd>${escapeHTML(hours.sabado)}</dd></div><div><dt>Domingo</dt><dd>${escapeHTML(hours.domingo)}</dd></div></dl>`:`<p>${escapeHTML(w.horarios || 'Não informado')}</p>`}</section>
     <section><h2>Serviços oferecidos</h2><div class="chips">${w.servicos.map(value=>`<span class="tag">${escapeHTML(value)}</span>`).join('')}</div></section>
-    <section class="reading review-summary"><h2>Avaliações</h2>${w.totalAvaliacoes?`<div class="rating-overview"><strong class="rating-number">${w.notaMedia.toFixed(1).replace('.',',')}</strong><div><span class="rating-stars" aria-label="${w.notaMedia.toFixed(1)} de 5">${stars}</span><p>${ratingText(w)}</p></div></div><p>${reviewDisclosure(w,Math.min(1,w.avaliacoes.length))}</p>${w.avaliacoes.slice(0,1).map(reviewCard).join('')}`:'<p>Ainda sem avaliações</p>'}<a class="button light" href="#oficina/${w.id}/avaliacoes">Ver todas as avaliações</a></section>
+    <section class="reading review-summary"><h2>Avaliações</h2>${w.totalAvaliacoes?`<div class="rating-overview"><strong class="rating-number">${w.notaMedia.toFixed(1).replace('.',',')}</strong><div><span class="rating-stars" role="img" aria-label="${w.notaMedia.toFixed(1)} de 5">${stars}</span><p>${ratingText(w)}</p></div></div><p>${reviewDisclosure(w,Math.min(1,w.avaliacoes.length))}</p>${w.avaliacoes.slice(0,1).map(reviewCard).join('')}`:'<p>Ainda sem avaliações</p>'}<a class="button light" href="#oficina/${w.id}/avaliacoes">Ver todas as avaliações</a></section>
     ${w.diferenciais?.length?`<section class="reading" data-workshop-differentials><h2>Diferenciais${w.origem==='real-verificada'?'':' de exemplo'}</h2>${listHTML(w.diferenciais)}</section>`:''}
     ${w.prazoMedioExemplo?`<section class="reading"><h2>Prazo médio de exemplo</h2><p data-workshop-deadline>${escapeHTML(w.prazoMedioExemplo)}</p><p class="help">Prazo fictício, sem disponibilidade ou promessa de entrega.</p></section>`:''}
     </div></article>`;
@@ -290,8 +298,21 @@ document.addEventListener('click', event => {
     form.hidden = !form.hidden;
     button.setAttribute('aria-expanded', String(!form.hidden));
     // Reabrir descarta alterações ainda não aplicadas, preservando os resultados exibidos.
-    if (!form.hidden) syncWorkshopFilters();
+    if (!form.hidden) {
+      syncWorkshopFilters();
+      form.elements.order.focus();
+    }
   }
+});
+document.addEventListener('keydown', event => {
+  if (event.key !== 'Escape' || !event.target.closest('#workshop-filters, #filters-toggle')) return;
+  const form = document.querySelector('#workshop-filters');
+  if (form.hidden) return;
+  event.preventDefault();
+  form.hidden = true;
+  const toggle = document.querySelector('#filters-toggle');
+  toggle.setAttribute('aria-expanded','false');
+  toggle.focus();
 });
 document.addEventListener('submit', event => {
   if (event.target.id !== 'workshop-filters') return;
@@ -541,10 +562,10 @@ function enterDemo(key) {
   const profile = demoProfiles[key];
   if (!profile) return;
   demoSession = {...profile};
-  const stored = persist(sessionKey,demoSession);
+  persist(sessionKey,demoSession);
   loginNotice = '';
   navigateDemo(profile.tipo === 'dono' ? '#minha-oficina' : '#perfil');
-  if (stored) toast('Perfil de demonstração iniciado. Nenhuma conta real foi criada.');
+
 }
 function renderDemoHeader() {
   const nav = document.querySelector('nav[aria-label="Navegação principal"]');
@@ -752,5 +773,14 @@ document.addEventListener('change', event => {
   if (target.dataset.check) { checks[target.dataset.check] = target.checked; persist('garagem.checks', checks); updateProgress(); }
 });
 document.querySelectorAll('[data-icon]').forEach(el => { el.innerHTML = icon(el.dataset.icon); });
+document.querySelector('.skip').addEventListener('click', event => {
+  event.preventDefault();
+  main.focus();
+  main.scrollIntoView({block:'start'});
+});
+const header = document.querySelector('header');
+new ResizeObserver(() => {
+  document.documentElement.style.setProperty('--header-height', header.offsetHeight + 'px');
+}).observe(header);
 window.addEventListener('hashchange', () => { route(); main.focus({preventScroll:true}); });
 route();
