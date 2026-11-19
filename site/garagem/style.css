@@ -1,3 +1,4 @@
+@layer estrutura {
 @font-face {
   font-family: 'Barlow Condensed';
   font-style: normal;
@@ -205,7 +206,7 @@ header, footer { flex: none; }
   .header-inner nav a { font-size: 13px; }
 }
 
-/* A abertura ocupa a janela inteira. O catálogo segue a identidade azul e laranja. */
+/* A abertura ocupa a janela inteira. */
 body:has(#opening-film) .header {
   position: absolute; z-index: 3; inset: 0 0 auto;
   background: transparent; border: 0; color: white;
@@ -236,15 +237,6 @@ body:has(#opening-film) .header :focus-visible { outline-color: white; }
   border-radius: 3px; font-size: 13px; min-height: 46px;
 }
 .hero .button:hover { background: #111a22; border-color: white; }
-#film-control {
-  position: absolute; z-index: 2; bottom: 16px; right: clamp(20px,4vw,48px);
-  display: flex; align-items: center; gap: 10px; min-height: 44px;
-  padding: 8px 12px; border: 0; color: white; background: #101419bc;
-  font: 500 12px var(--body); border-radius: 3px;
-}
-#film-control:before { content: ''; border-width: 5px 0 5px 8px; border-style: solid; border-color: transparent transparent transparent white; }
-#film-control[data-playing=true]:before { width: 8px; height: 10px; border: solid white; border-width: 0 2px; }
-#film-control:focus-visible { outline-color: white; }
 .project-photos { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px,3vw,36px); }
 .project-photo { display: block; min-width: 0; }
 .project-photo img { display: block; width: 100%; aspect-ratio: 3/2; object-fit: cover; object-position: 50% 53%; filter: contrast(1.035) saturate(.96); }
@@ -255,4 +247,5 @@ body:has(#opening-film) .header :focus-visible { outline-color: white; }
   .hero .actions { gap: 8px; }
   .hero .button { padding-inline: 12px; }
   .project-photos { grid-template-columns: 1fr; gap: 24px; }
+}
 }

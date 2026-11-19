@@ -14,9 +14,14 @@ A capa usa um loop silencioso de 15,16 s em MP4 (H.264), montado a partir
 de cinco trechos em velocidade original e com transições de 0,2 s.
 O celular em pé recebe a versão vertical. Em paisagem, a página usa um
 recorte panorâmico por trecho. Ambas as versões preenchem a tela mantendo
-a proporção da imagem. A resolução de origem é 540 × 960.
-O visitante pode pausar e retomar a reprodução. Com movimento reduzido
-ou economia de dados sinalizada pelo navegador, a capa começa estática.
+a proporção da imagem. A versão vertical usa os 540 × 960 da gravação
+original (9,2 MB). A panorâmica amplia o recorte para 1600 × 900 (21,5 MB).
+A reprodução é automática. Com movimento reduzido ou economia de dados
+sinalizada pelo navegador, a capa exibe uma imagem estática.
+
+O arquivo identidade.css aplica a paleta e a tipografia do DESIGN.md
+às seções abaixo da capa e às páginas internas. As regras de disposição
+e os pontos de adaptação para celular ficam em style.css.
 
 A seção de fotos liga a picape ao guia de suspensão e o motor ao guia
 de turbo. Para acrescentar fotos, coloque as imagens em assets/ e preencha
