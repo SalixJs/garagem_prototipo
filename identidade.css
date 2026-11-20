@@ -1,0 +1,135 @@
+/* Cores e tipografia do DESIGN.md nas áreas de leitura e navegação. */
+:root {
+  --accent-garagem: #fb8048;
+  --title-font: 'DM Sans', 'Segoe UI', sans-serif;
+  --reading-font: Georgia, 'Times New Roman', serif;
+  --control-font: Consolas, 'Liberation Mono', 'Courier New', monospace;
+}
+body { background: #000; }
+
+.header {
+  color-scheme: dark;
+  color: #fff;
+  background: #000;
+  border-color: #262626;
+  font-family: var(--title-font);
+}
+body:has(#opening-film) .header { background: rgb(0 0 0 / 64%); }
+.header .brand {
+  color: #fff;
+  font-family: var(--title-font);
+  font-weight: 600;
+  letter-spacing: -.025em;
+}
+.header .brand-dot, footer .brand-dot { color: var(--accent-garagem); }
+.header :is(nav a, .saved-link, .button) {
+  font-family: var(--control-font);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: #e6e6e6;
+}
+.header :is(nav a, .saved-link):is(:hover, [aria-current="page"]) { color: #fff; }
+.header nav a.active::after { background: var(--accent-garagem); }
+.header #saved-count { color: #fff; background: #262626; font-variant-numeric: tabular-nums; }
+.header .session-label { color: #fff; font-family: var(--title-font); }
+.header .session-label small { color: #ccc; }
+.header .button { color: #fff; border-color: #999; background: transparent; border-radius: 999px; }
+.header .button:hover { border-color: #fff; background: #141414; }
+.header :focus-visible { outline: 2px solid var(--accent-garagem); outline-offset: 3px; }
+.header .button:focus-visible { outline-color: #fff; }
+
+@scope (main > :not(.hero), footer, dialog, #toast, .skip) {
+  :scope {
+    color-scheme: dark;
+    --paper: #000;
+    --ink: #fff;
+    --text: #ccc;
+    --strong: #e6e6e6;
+    --muted: #aaa;
+    --soft: #0d0d0d;
+    --card: #141414;
+    --raised: #1f1f1f;
+    --line: #303030;
+    --divider: #444;
+    --control-line: #838383;
+    --link: #c3d9f3;
+    --blue: var(--link);
+    --orange: var(--ink);
+    --display: var(--title-font);
+    --body: var(--reading-font);
+    --mono: var(--control-font);
+    color: var(--text);
+    background-color: var(--paper);
+    font-family: var(--body);
+  }
+  p, address, .about-panel li, .banner-copy p { color: var(--text); }
+  strong, b, legend, .opening-hours dt { color: var(--ink); }
+  h1, h2, h3, h4, .brand, .photo-title, .rating-number, .profile-logo, .step-number {
+    font-family: var(--display);
+    font-weight: 400;
+    color: var(--ink);
+  }
+  .photo-title { letter-spacing: .025em; }
+  h1, h2 { letter-spacing: .025em; }
+  .reading p, .prose p, .card-content p, .review-card p, .workshop-card p {
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+  .page-heading h1 { hyphens: auto; overflow-wrap: anywhere; }
+  button, summary, .button, .card-meta, .tag, .legal-badge,
+  .chip, .choice-chip, .rating-chip, .session-label, .result-count { font-family: var(--mono); }
+  .button, .button.light, .button.dark, .button.secondary, .chip, .choice-chip, .save, .dialog-close {
+    border-color: var(--control-line);
+    border-radius: 999px;
+    color: var(--ink);
+    background: var(--soft);
+  }
+  .button { border-color: var(--strong); }
+  :is(.button, .save, .chip, .choice-chip, .dialog-close):hover,
+  .save[aria-pressed=true], .chip[aria-pressed=true], .choice-chip:has(input:checked) {
+    background: var(--raised);
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+  .chip[aria-pressed=true], .choice-chip:has(input:checked) { text-decoration: underline; text-underline-offset: .2em; }
+  .button:disabled { opacity: .75; border-style: dashed; }
+  :focus-visible, .choice-chip:has(input:focus-visible) { outline: 2px solid var(--link); outline-offset: 3px; }
+  .text-link, .source a, .plain-button, .footer-inner > a:last-child, .footer-bottom a {
+    color: var(--link); text-decoration: underline; text-underline-offset: .25em;
+  }
+
+  .tag, .rating-chip { color: var(--strong); background: var(--raised); }
+  .skip, #toast, dialog { background: var(--raised); color: var(--ink); box-shadow: none; }
+  .benefits, footer { background: var(--paper); border-color: var(--line); }
+  .benefit > .icon, .profile-address .icon, .rating-stars, .step-number { color: var(--strong); }
+  .guide-card, .workshop-card, .review-summary, .owner-summary, .filters-panel,
+  .about-panel, .legal-steps > li, .source-card, .empty, .workshop-profile .review-summary {
+    border-color: var(--line); border-radius: 0; background: var(--card); box-shadow: none;
+  }
+  .card-art, .card-art.orange, .card-art.slate, .workshop-banner { background: var(--soft); color: var(--strong); }
+  .card-art::before, .card-art::after { border-color: var(--line); }
+  .card-art svg { filter: none; }
+  .card-meta { color: var(--muted); }
+  .legal-badge.permitida, .legal-badge.exige-regularizacao, .legal-badge.restricao-relevante {
+    color: var(--strong); background: var(--raised); border-color: var(--control-line);
+  }
+  .card-bottom, .step { border-color: var(--divider); }
+  .map-art { background: var(--soft); filter: grayscale(1); }
+  .map-art > svg { opacity: .24; }
+  .map-badge { background: var(--card); color: var(--ink); box-shadow: none; }
+  .map-badge .icon, .workshop-avatar { color: var(--strong); }
+  .workshop-avatar, .profile-logo, .profile-logo img { background: var(--raised); }
+  .notice, .form-error, .checklist label { border-color: var(--divider); background: var(--soft); color: var(--strong); }
+  .form-error { color: #ffcd92; }
+  .search, select, .field input, .field textarea {
+    color: var(--ink); background: var(--soft); border-color: var(--control-line); border-radius: 0;
+  }
+  select option { background: var(--card); color: var(--ink); }
+  input::placeholder, textarea::placeholder { color: var(--muted); }
+  .field input[type=file]::file-selector-button { color: var(--ink); background: var(--raised); border-color: var(--control-line); }
+  .choice-chip input, .demo-switch input, .checklist input, .progress-list progress { accent-color: var(--ink); }
+  fieldset { border-color: var(--divider); }
+  .empty > .icon, .footer-inner p, .footer-bottom { color: var(--muted); }
+}
