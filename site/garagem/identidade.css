@@ -36,8 +36,9 @@ body:has(#opening-film) .header { background: rgb(0 0 0 / 64%); }
 .header .session-label { color: #fff; font-family: var(--title-font); }
 .header .session-label small { color: #ccc; }
 .header .button { color: #fff; border-color: #999; background: transparent; border-radius: 999px; }
-.header .button:hover, .header .button[aria-current="page"] { border-color: var(--accent-garagem); background: #141414; }
+.header .button:hover { border-color: #fff; background: #141414; }
 .header :focus-visible { outline: 2px solid var(--accent-garagem); outline-offset: 3px; }
+.header .button:focus-visible { outline-color: #fff; }
 
 @scope (main > :not(.hero), footer, dialog, #toast, .skip) {
   :scope {
