@@ -110,35 +110,12 @@ address{font-style:normal;line-height:1.9;color:var(--muted)}
 .rating-stars{color:var(--blue);font-size:23px;letter-spacing:3px}
 .rating-overview p{font-size:13px;margin:8px 0 0}
 .workshop-profile .review-summary{padding:24px;border:1px solid var(--line);border-radius:8px;background:var(--white)}
-.login-page {
-  display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
-  align-items: start;
-  gap: clamp(32px, 7vw, 110px);
-  padding-block: clamp(40px, 7vw, 100px);
-}
-.login-intro .page-heading { padding: 0; }
-.login-intro .notice { margin: 28px 0 0; }
-.login-panel {
-  padding: clamp(20px, 3vw, 40px);
-  background: var(--white);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-}
-.login-panel fieldset { border: 0; padding: 0; margin: 0 0 24px; }
-.login-panel legend { padding: 0; margin-bottom: 14px; font-size: 20px; }
-.login-panel .chips { margin: 0; }
-.login-panel .choice-chip { min-height: 44px; }
-.login-panel .button { width: 100%; }
 .login-links { display: flex; gap: 0 24px; flex-wrap: wrap; border-top: 1px solid var(--line); margin-top: 24px; padding-top: 12px; }
 .login-links a { min-height: 44px; white-space: normal; }
 .owner-summary + section { margin-top: 36px; }
 .owner-summary > div { min-width: 0; overflow-wrap: anywhere; }
 .rating-number, .rating-chip, .opening-hours dd { font-variant-numeric: tabular-nums; }
 .choice-chip:has(input:focus-visible) { outline: 3px solid var(--blue); outline-offset: 3px; }
-@media (max-width: 800px) {
-  .login-page { grid-template-columns: 1fr; gap: 24px; padding-block: 32px 44px; }
-}
 @media(max-width:650px){
  .header-inner{grid-template-columns:minmax(0,1fr) auto auto;gap:2px 12px;padding-block:8px 0}
  .header-inner .saved-link{grid-column:2;grid-row:1;margin-left:0}

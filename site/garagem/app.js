@@ -615,15 +615,15 @@ function renderDemoHeader() {
 function renderLogin(message = '') {
   const owner = nextLoginRole === 'dono';
   nextLoginRole = 'entusiasta';
-  main.innerHTML = `<div class="container login-page"><div class="login-intro">${pageHeader('Entrar','Salve guias como entusiasta ou experimente editar o perfil de uma oficina.')}
-    <div class="notice"><strong>Modo demonstração: sem senha real, sem conta real</strong><p>O navegador guarda o tipo de perfil, um nome de exemplo e, para o dono, qual oficina foi escolhida.</p></div></div>
-    <div class="login-panel">
-    ${message ? `<p class="form-error" role="status">${escapeHTML(message)}</p>` : ''}
+  main.innerHTML = `<div class="container">${pageHeader('Perfil','Salve guias como entusiasta ou experimente editar o perfil de uma oficina.')}
+    <div class="page-content"><div class="notice"><strong>Modo demonstração: sem senha real, sem conta real</strong><p>O navegador guarda o tipo de perfil, um nome de exemplo e, para o dono, qual oficina foi escolhida.</p>
+    ${message ? `<p role="status">${escapeHTML(message)}</p>` : ''}</div>
+    <div class="filters-panel">
     <fieldset><legend>Escolha seu perfil</legend><div class="chips"><label class="choice-chip"><input type="radio" name="login-role" value="entusiasta" ${owner?'':'checked'}> Entusiasta</label><label class="choice-chip"><input type="radio" name="login-role" value="dono" ${owner?'checked':''}> Dono de oficina</label></div></fieldset>
     <div id="login-enthusiast" ${owner?'hidden':''}><button class="button" data-demo-login="entusiasta">Entrar como entusiasta (demo)</button></div>
     <div id="login-owner" ${owner?'':'hidden'}><p>Escolha a oficina que você quer editar neste navegador.</p><div class="actions"><button class="button" data-demo-login="patrick">Entrar como dono da Patrick Suspensões (demo)</button><button class="button light" data-demo-login="acf">Entrar como dono da ACF Performance (demo)</button></div></div>
-    <div class="login-links"><a class="text-link" href="#cadastro">Criar conta · demonstração</a><a class="text-link" href="#oficinas">Continuar como visitante</a></div></div></div>`;
-  document.title = 'Entrar · demonstração | Garagem';
+    <div class="login-links"><a class="text-link" href="#cadastro">Criar conta · demonstração</a><a class="text-link" href="#oficinas">Continuar como visitante</a></div></div></div></div>`;
+  document.title = 'Entrar no perfil · demonstração | Garagem';
 }
 function renderProfile() {
   if (!demoSession) { loginNotice = 'Entre com um perfil de demonstração para acessar'; location.replace('#login'); return; }
@@ -633,9 +633,9 @@ function renderProfile() {
   const preferences = {cidade:availableCities.includes(raw?.cidade)?raw.cidade:'',especialidades:Array.isArray(raw?.especialidades)?raw.especialidades.filter(value=>allowedServices.includes(value)):[]};
   main.innerHTML = `<div class="container detail-page">${pageHeader('Perfil', 'Favoritos, preparação e interesses ficam apenas neste navegador.')}
     <div class="page-content"><div class="notice"><strong>${escapeHTML(demoSession.nomeExibicao)}</strong><p>${demoSession.tipo === 'dono' ? 'Dono de oficina' : 'Entusiasta'} · Modo demonstração: sem senha real, sem conta real. Favoritos, checklists e preferências são compartilhados entre os perfis de exemplo deste navegador.</p></div>
-    <section><h2>Guias favoritos</h2>${saved.length ? `<div class="guide-grid">${guides.filter(g=>saved.includes(g.id)).map(guideCard).join('')}</div>` : '<p>Nenhum guia salvo ainda. <a class="text-link" href="#guias">Explorar guias</a></p>'}</section>
-    <section class="section"><h2>Checklists em andamento</h2>${progress.length ? `<ul class="progress-list">${progress.map(({guide,items,done})=>`<li><a class="text-link" href="#guia/${guide.id}">${escapeHTML(guide.titulo)}</a><span>${done} de ${items.length} itens ${done===items.length?'· Preparação marcada como concluída':''}</span><progress value="${done}" max="${items.length}" aria-label="Preparação de ${escapeHTML(guide.titulo)}"></progress></li>`).join('')}</ul>` : '<p>Marque itens em um guia para acompanhar sua preparação aqui.</p>'}</section>
-    <section class="reading"><h2>Preferências</h2><form id="preferences-form"><label class="field">Cidade de interesse<select name="cidade">${options(availableCities,'Todas as cidades')}</select></label><fieldset><legend>Especialidades de interesse</legend><div class="chips">${allowedServices.map(value=>`<label class="choice-chip"><input type="checkbox" name="interest" value="${escapeHTML(value)}" ${preferences.especialidades.includes(value)?'checked':''}>${escapeHTML(value)}</label>`).join('')}</div></fieldset><p class="help">Preferências de navegação, sem localização automática. Ficam somente neste navegador e não alteram seus filtros atuais.</p><button class="button" type="submit">Salvar preferências</button><p id="preferences-status" role="status"></p></form></section>
+    <section><h2>Guias favoritos</h2>${saved.length ? `<div class="guide-grid">${guides.filter(g=>saved.includes(g.id)).map(guideCard).join('')}</div>` : '<div class="empty"><p>Nenhum guia salvo ainda.</p><a class="button" href="#guias">Explorar guias</a></div>'}</section>
+    <section><h2>Checklists em andamento</h2>${progress.length ? `<ul class="progress-list">${progress.map(({guide,items,done})=>`<li><a class="text-link" href="#guia/${guide.id}">${escapeHTML(guide.titulo)}</a><span>${done} de ${items.length} itens ${done===items.length?'· Preparação marcada como concluída':''}</span><progress value="${done}" max="${items.length}" aria-label="Preparação de ${escapeHTML(guide.titulo)}"></progress></li>`).join('')}</ul>` : '<p>Marque itens em um guia para acompanhar sua preparação aqui.</p>'}</section>
+    <section><h2>Preferências</h2><form id="preferences-form" class="filters-panel"><label class="field">Cidade de interesse<select name="cidade">${options(availableCities,'Todas as cidades')}</select></label><fieldset><legend>Especialidades de interesse</legend><div class="chips">${allowedServices.map(value=>`<label class="choice-chip"><input type="checkbox" name="interest" value="${escapeHTML(value)}" ${preferences.especialidades.includes(value)?'checked':''}>${escapeHTML(value)}</label>`).join('')}</div></fieldset><p class="help">Preferências de navegação, sem localização automática. Ficam somente neste navegador e não alteram seus filtros atuais.</p><button class="button" type="submit">Salvar preferências</button><p id="preferences-status" role="status"></p></form></section>
     </div></div>`;
   document.querySelector('#preferences-form [name=cidade]').value = preferences.cidade;
   updateSaved(); document.title = 'Perfil | Garagem';
@@ -771,9 +771,11 @@ function route() {
   else ({inicio:renderHome,guias:renderGuides,oficinas:renderWorkshops,salvos:renderSaved,sobre:renderAbout}[view] || (() => renderNotFound('Página')))();
   const section = view === 'guia' ? 'guias' : view === 'oficina' ? 'oficinas' : view === 'salvos' ? 'perfil' : view;
   document.querySelectorAll('[data-nav]').forEach(link => {
-    const active = link.dataset.nav === section;
-    link.classList.toggle('active', active);
-    if (active) link.setAttribute('aria-current', 'page'); else link.removeAttribute('aria-current');
+    const currentPage = link.dataset.nav === section;
+    const profileEntry = link.dataset.nav === 'perfil' && view === 'login';
+    link.classList.toggle('active', currentPage || profileEntry);
+    if (currentPage || profileEntry) link.setAttribute('aria-current', profileEntry ? 'location' : 'page');
+    else link.removeAttribute('aria-current');
   });
   updateSaved(); window.scrollTo(0,0);
 }

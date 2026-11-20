@@ -103,7 +103,7 @@ body:has(#opening-film) .header { background: rgb(0 0 0 / 64%); }
   .skip, #toast, dialog { background: var(--raised); color: var(--ink); box-shadow: none; }
   .benefits, footer { background: var(--paper); border-color: var(--line); }
   .benefit > .icon, .profile-address .icon, .rating-stars, .step-number { color: var(--strong); }
-  .guide-card, .workshop-card, .review-summary, .owner-summary, .login-panel, .filters-panel,
+  .guide-card, .workshop-card, .review-summary, .owner-summary, .filters-panel,
   .about-panel, .legal-steps > li, .source-card, .empty, .workshop-profile .review-summary {
     border-color: var(--line); border-radius: 0; background: var(--card); box-shadow: none;
   }
